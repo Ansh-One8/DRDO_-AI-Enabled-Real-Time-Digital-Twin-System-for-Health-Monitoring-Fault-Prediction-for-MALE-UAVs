@@ -1,0 +1,58 @@
+{
+  "anomaly_detector": {
+    "roc_auc": 0.7693333007145646,
+    "recall_on_faults": 0.18099547511312217,
+    "false_positive_rate": 0.02707733965137925
+  },
+  "fault_classifier": {
+    "macro_f1": 0.9487629952489733,
+    "labels": [
+      "cooling_degradation",
+      "healthy",
+      "lubrication_degradation",
+      "misfire",
+      "sensor_drift_cht"
+    ],
+    "confusion_matrix": [
+      [
+        641,
+        10,
+        0,
+        0,
+        0
+      ],
+      [
+        24,
+        5803,
+        3,
+        78,
+        1
+      ],
+      [
+        0,
+        73,
+        882,
+        0,
+        0
+      ],
+      [
+        0,
+        93,
+        0,
+        905,
+        0
+      ],
+      [
+        0,
+        190,
+        0,
+        0,
+        1405
+      ]
+    ]
+  },
+  "rul_regressor": {
+    "mae_seconds": 90.62876892089844,
+    "r2": -1.7289116382598877
+  }
+}

@@ -1,0 +1,46 @@
+# --- Python virtual environment (never commit — machine-specific, ~300 MB) ---
+uav_env/
+.venv/
+venv/
+env/
+
+# --- Python caches ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# --- Large legacy datasets (the ml/ pipeline generates its own training data) ---
+# If you really want these tracked, use Git LFS or delete these two lines.
+uav_training_data.csv
+uav_training_data_v2_correlated_rul.csv
+*.parquet
+
+# --- Runtime / generated artifacts ---
+digital_twin_history.db
+*.sqlite
+*.sqlite3
+
+# --- Oversized / dead model blobs ---
+# 22 MB pickle from the original Kaggle export; the live explainer is built
+# at runtime (ml/explainability.py) and never loads this.
+**/shap_explainer.joblib
+models_legacy_kaggle/
+
+# --- Rendered docs (regenerate from docs/EXPLAINER.md) ---
+docs/*.pdf
+docs/page-*.jpg
+docs/pg-*.jpg
+
+# --- Editor / OS ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.claude/settings.local.json
+
+# --- Scratch ---
+scratch_*.py
+scratchpad/

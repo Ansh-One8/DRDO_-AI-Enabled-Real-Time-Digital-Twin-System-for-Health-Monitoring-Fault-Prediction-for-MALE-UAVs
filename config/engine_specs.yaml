@@ -1,0 +1,100 @@
+# =============================================================================
+# MALE UAV Aero-Piston Engine -- Nominal Specification & Alarm Thresholds
+# =============================================================================
+# Calibrated against published Rotax 914 (turbocharged flat-four) operator-manual
+# data -- the engine family actually flown on MALE-class UAVs (e.g. IAI Heron).
+# These numbers drive:
+#   * core/physics_model.py   -> the steady-state "digital twin baseline"
+#   * ml/models.py            -> residual / health scoring
+#   * dashboard/*             -> redline bands, advisory thresholds
+#
+# Every value has a source comment so a propulsion engineer can audit it.
+# =============================================================================
+
+engine:
+  name: "Rotax 914 (turbocharged, flat-four)"
+  n_cylinders: 4
+
+  rpm:
+    idle: 1400
+    cruise: 5000            # below max-continuous (5500)
+    max: 5800               # takeoff, 5 min limit
+    redline: 5800
+
+  manifold_pressure_inHg:   # MAP (turbo-boosted)
+    idle: 12.0
+    max: 29.9
+
+  cht_c:                    # Cylinder Head Temperature
+    idle: 90.0
+    cruise: 125.0
+    redline: 150.0          # Rotax spec: CHT max 150 C
+
+  egt_c:                    # Exhaust Gas Temperature
+    idle: 420.0
+    cruise: 800.0           # Rotax spec: EGT normal ~800 C
+    redline: 900.0          # Rotax spec: EGT max ~900 C
+    max_cylinder_spread: 90.0   # >90 C spread between cylinders => misfire / injector fault
+
+  oil_pressure_bar:
+    min: 0.8               # Rotax spec: min 0.8 bar below 3500 RPM
+    cruise: 4.0
+    max: 5.0              # normal max above 3500 RPM
+    coldstart_spike_max: 7.0   # relief-valve ceiling on a cold start
+    abort_threshold: 1.5   # below this in flight => lubrication emergency
+
+  oil_temp_c:
+    idle: 60.0
+    cruise: 100.0
+    redline: 130.0
+
+  fuel_flow_lph:
+    max: 25.0
+
+  vibration_rms_g:
+    baseline: 1.0
+    caution: 2.5
+    redline: 4.0
+
+  battery_voltage_v:
+    nominal: 13.8
+    alternator_fail_below: 12.4
+
+  injection_timing_deg_btdc:
+    nominal: 22.0
+    tolerance: 4.0
+
+  turbo:
+    critical_altitude_m: 5000.0   # boost holds rated MAP up to here
+
+# Thermal time-constants (first-order lag, seconds) -- used by the twin baseline
+# to predict transient (not just steady-state) expected values.
+thermal_time_constants_s:
+  cht: 120.0
+  egt: 5.0
+  oil_temp: 240.0
+
+# Residual tolerance band per sensor (|measured - physics| below this = healthy).
+# These set the sensitivity of the "Twin Cognition" deviation view.
+residual_tolerance:
+  rpm: 200.0
+  cht: 12.0
+  egt: 40.0
+  oil_pressure: 0.5
+  oil_temp: 8.0
+  fuel_flow: 1.5
+  vibration: 0.3
+  battery_voltage: 0.4
+
+# Which sensors roll up into each subsystem health index (0-100).
+subsystems:
+  thermal_health:     [cht, egt]
+  lubrication_health: [oil_pressure, oil_temp]
+  combustion_health:  [vibration, rpm, egt]
+  electrical_health:  [battery_voltage]
+
+# ISA sea-level reference used by the altitude/density model.
+atmosphere:
+  isa_sea_level_temp_c: 15.0
+  isa_sea_level_pressure_pa: 101325.0
+  lapse_rate_c_per_m: 0.0065

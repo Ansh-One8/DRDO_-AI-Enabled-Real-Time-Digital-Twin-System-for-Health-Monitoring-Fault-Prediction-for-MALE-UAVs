@@ -1,0 +1,10 @@
+# Keep shell scripts LF so they run on Linux/Mac after a Windows checkout
+*.sh text eol=lf
+
+# Normalize text; let Git handle line endings per-platform elsewhere
+* text=auto
+
+# Treat model blobs and office docs as binary
+*.joblib binary
+*.docx binary
+*.db binary

@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "twin-dashboard",
+      "runtimeExecutable": "uav_env/Scripts/python.exe",
+      "runtimeArgs": ["-m", "streamlit", "run", "dashboard/app.py", "--server.port", "8520", "--server.headless", "true", "--browser.gatherUsageStats", "false"],
+      "port": 8520,
+      "autoPort": false
+    }
+  ]
+}

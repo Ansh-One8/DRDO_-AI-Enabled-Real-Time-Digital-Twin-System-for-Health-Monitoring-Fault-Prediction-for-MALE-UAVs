@@ -1,0 +1,2397 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>MALE UAV Engine Digital Twin — Complete Explainer (SIH 26054)</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">MALE UAV Engine Digital Twin — Complete Explainer (SIH
+26054)</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#male-uav-aero-piston-engine-digital-twin--complete-explainer" id="toc-male-uav-aero-piston-engine-digital-twin--complete-explainer">MALE
+UAV Aero-Piston Engine Digital Twin — Complete Explainer</a>
+<ul>
+<li><a href="#1-the-problem-in-plain-language" id="toc-1-the-problem-in-plain-language">1. The problem in plain
+language</a>
+<ul>
+<li><a href="#what-is-a-digital-twin" id="toc-what-is-a-digital-twin">What is a &quot;digital twin&quot;?</a></li>
+<li><a href="#why-does-a-male-uav-need-this" id="toc-why-does-a-male-uav-need-this">Why does a MALE UAV need
+this?</a></li>
+<li><a href="#what-the-brief-asked-for-and-what-we-built" id="toc-what-the-brief-asked-for-and-what-we-built">What the brief asked
+for (and what we built)</a></li>
+</ul></li>
+<li><a href="#2-glossary" id="toc-2-glossary">2. Glossary</a>
+<ul>
+<li><a href="#engine-parameters" id="toc-engine-parameters">Engine
+parameters</a></li>
+<li><a href="#atmosphere--flight" id="toc-atmosphere--flight">Atmosphere
+&amp; flight</a></li>
+<li><a href="#systems--protocols" id="toc-systems--protocols">Systems
+&amp; protocols</a></li>
+<li><a href="#ai--ml--stats" id="toc-ai--ml--stats">AI / ML /
+stats</a></li>
+<li><a href="#software--infra" id="toc-software--infra">Software /
+infra</a></li>
+</ul></li>
+<li><a href="#3-domain-primer" id="toc-3-domain-primer">3. Domain
+primer</a>
+<ul>
+<li><a href="#31-how-a-4-stroke-piston-aero-engine-makes-power" id="toc-31-how-a-4-stroke-piston-aero-engine-makes-power">3.1 How a
+4-stroke piston aero-engine makes power</a></li>
+<li><a href="#32-where-the-heat-goes-and-why-cht-matters" id="toc-32-where-the-heat-goes-and-why-cht-matters">3.2 Where the heat
+goes (and why CHT matters)</a></li>
+<li><a href="#33-why-oil-pressure-is-the-scariest-gauge" id="toc-33-why-oil-pressure-is-the-scariest-gauge">3.3 Why oil pressure
+is the scariest gauge</a></li>
+<li><a href="#34-what-a-misfire-looks-like" id="toc-34-what-a-misfire-looks-like">3.4 What a misfire looks
+like</a></li>
+<li><a href="#35-sensor-faults-vs-engine-faults" id="toc-35-sensor-faults-vs-engine-faults">3.5 Sensor faults vs. engine
+faults</a></li>
+</ul></li>
+<li><a href="#4-system-architecture" id="toc-4-system-architecture">4.
+System architecture</a>
+<ul>
+<li><a href="#41-the-pipeline-one-process-top-to-bottom" id="toc-41-the-pipeline-one-process-top-to-bottom">4.1 The pipeline (one
+process, top to bottom)</a></li>
+<li><a href="#42-why-one-process-and-not-the-original-4-process-mqtt-design" id="toc-42-why-one-process-and-not-the-original-4-process-mqtt-design">4.2
+Why one process (and not the original 4-process MQTT design)</a></li>
+<li><a href="#43-repo-map" id="toc-43-repo-map">4.3 Repo map</a></li>
+</ul></li>
+<li><a href="#5-module-deep-dives" id="toc-5-module-deep-dives">5.
+Module deep-dives</a>
+<ul>
+<li><a href="#51-configengine_specsyaml" id="toc-51-configengine_specsyaml">5.1
+<code>config/engine_specs.yaml</code></a></li>
+<li><a href="#52-corephysics_modelpy" id="toc-52-corephysics_modelpy">5.2
+<code>core/physics_model.py</code></a></li>
+<li><a href="#53-corescenario_runnerpy" id="toc-53-corescenario_runnerpy">5.3
+<code>core/scenario_runner.py</code></a></li>
+<li><a href="#54-corecan_telemetrypy" id="toc-54-corecan_telemetrypy">5.4
+<code>core/can_telemetry.py</code></a></li>
+<li><a href="#55-mldatasetpy--mltrainpy" id="toc-55-mldatasetpy--mltrainpy">5.5 <code>ml/dataset.py</code> +
+<code>ml/train.py</code></a></li>
+<li><a href="#56-mlmodelspy" id="toc-56-mlmodelspy">5.6
+<code>ml/models.py</code></a></li>
+<li><a href="#57-mlexplainabilitypy" id="toc-57-mlexplainabilitypy">5.7
+<code>ml/explainability.py</code></a></li>
+<li><a href="#58-coretwin_pipelinepy" id="toc-58-coretwin_pipelinepy">5.8
+<code>core/twin_pipeline.py</code></a></li>
+<li><a href="#59-dashboard" id="toc-59-dashboard">5.9
+<code>dashboard/</code></a></li>
+</ul></li>
+<li><a href="#6-the-four-scenarios-explained" id="toc-6-the-four-scenarios-explained">6. The four scenarios,
+explained</a>
+<ul>
+<li><a href="#nominal_loiter--the-baseline" id="toc-nominal_loiter--the-baseline"><code>nominal_loiter</code> — the
+baseline</a></li>
+<li><a href="#altitude_cooling_degradation--cylinder-head-cooling-degradation" id="toc-altitude_cooling_degradation--cylinder-head-cooling-degradation"><code>altitude_cooling_degradation</code>
+— Cylinder-Head Cooling Degradation</a></li>
+<li><a href="#lubrication_loss--lubrication-loss--bearing-failure" id="toc-lubrication_loss--lubrication-loss--bearing-failure"><code>lubrication_loss</code>
+— Lubrication Loss &amp; Bearing Failure</a></li>
+<li><a href="#injector_misfire--injector-clog--cylinder-misfire" id="toc-injector_misfire--injector-clog--cylinder-misfire"><code>injector_misfire</code>
+— Injector Clog / Cylinder Misfire</a></li>
+</ul></li>
+<li><a href="#7-design-decisions-and-trade-offs" id="toc-7-design-decisions-and-trade-offs">7. Design decisions and
+trade-offs</a>
+<ul>
+<li><a href="#why-physics-informed-residuals-instead-of-raw-signal-deep-learning" id="toc-why-physics-informed-residuals-instead-of-raw-signal-deep-learning">Why
+physics-informed residuals instead of raw-signal deep learning?</a></li>
+<li><a href="#why-xgboost-and-not-a-neural-network" id="toc-why-xgboost-and-not-a-neural-network">Why XGBoost and not a
+neural network?</a></li>
+<li><a href="#why-a-single-process-for-the-demo-when-the-brief-implies-a-distributed-gcs" id="toc-why-a-single-process-for-the-demo-when-the-brief-implies-a-distributed-gcs">Why
+a single process for the demo, when the brief implies a distributed
+GCS?</a></li>
+<li><a href="#why-is-the-headline-rul-a-physics-trend-and-not-the-trained-regressor" id="toc-why-is-the-headline-rul-a-physics-trend-and-not-the-trained-regressor">Why
+is the headline RUL a physics trend and not the trained
+regressor?</a></li>
+<li><a href="#why-does-the-isolationforest-have-low-recall--is-the-anomaly-detection-weak" id="toc-why-does-the-isolationforest-have-low-recall--is-the-anomaly-detection-weak">Why
+does the IsolationForest have low recall — is the anomaly detection
+weak?</a></li>
+<li><a href="#why-not-a-3-d-model-of-the-airframe" id="toc-why-not-a-3-d-model-of-the-airframe">Why not a 3-D model of the
+airframe?</a></li>
+<li><a href="#why-compress-the-mission-to-180-seconds-and-start-the-engine-warm" id="toc-why-compress-the-mission-to-180-seconds-and-start-the-engine-warm">Why
+compress the mission to 180 seconds, and start the engine warm?</a></li>
+<li><a href="#why-keep-the-old-files-instead-of-deleting-them" id="toc-why-keep-the-old-files-instead-of-deleting-them">Why keep the
+old files instead of deleting them?</a></li>
+<li><a href="#why-streamlit" id="toc-why-streamlit">Why
+Streamlit?</a></li>
+<li><a href="#why-simulated-data-and-not-a-real-engine-dataset" id="toc-why-simulated-data-and-not-a-real-engine-dataset">Why simulated
+data and not a real engine dataset?</a></li>
+</ul></li>
+<li><a href="#8-numbers-you-must-be-able-to-defend" id="toc-8-numbers-you-must-be-able-to-defend">8. Numbers you must be
+able to defend</a></li>
+<li><a href="#9-deployment-roadmap" id="toc-9-deployment-roadmap">9.
+Deployment roadmap</a></li>
+<li><a href="#10-jury-qa-bank" id="toc-10-jury-qa-bank">10. Jury Q&amp;A
+bank</a>
+<ul>
+<li><a href="#conceptual" id="toc-conceptual">Conceptual</a></li>
+<li><a href="#physics--domain" id="toc-physics--domain">Physics /
+domain</a></li>
+<li><a href="#ml" id="toc-ml">ML</a></li>
+<li><a href="#software--systems" id="toc-software--systems">Software /
+systems</a></li>
+<li><a href="#application--operations" id="toc-application--operations">Application / operations</a></li>
+<li><a href="#gotcha-questions" id="toc-gotcha-questions">&quot;Gotcha&quot;
+questions</a></li>
+</ul></li>
+<li><a href="#11-4-minute-demo-script" id="toc-11-4-minute-demo-script">11. 4-minute demo script</a></li>
+<li><a href="#12-known-limitations-and-honest-future-work" id="toc-12-known-limitations-and-honest-future-work">12. Known
+limitations and honest future work</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="male-uav-aero-piston-engine-digital-twin--complete-explainer">MALE
+UAV Aero-Piston Engine Digital Twin — Complete Explainer</h1>
+<p><strong>Smart India Hackathon (SIH) — Problem Statement ID
+26054</strong> Prepared as a study + jury-defence guide. Read top to
+bottom once; after that use the section index to jump.</p>
+<hr />
+<h2 id="1-the-problem-in-plain-language">1. The problem in plain
+language</h2>
+<h3 id="what-is-a-digital-twin">What is a &quot;digital twin&quot;?</h3>
+<p>A <strong>digital twin</strong> is a live, continuously updated
+virtual model of a physical asset. It is not a one-off simulation — it
+is <em>synchronised</em> with the real thing by a stream of sensor data,
+so at every moment the virtual model reflects the current state of the
+physical engine. On top of that synchronised model you run analytics:
+<em>is it healthy? what&#39;s failing? how long until it can&#39;t fly?</em></p>
+<p>Three ingredients, all present in this project:</p>
+<table>
+<thead>
+<tr>
+<th>Ingredient</th>
+<th>Here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A model of the physical system</strong></td>
+<td><code>core/physics_model.py</code> — first-principles thermodynamics
+of the engine</td>
+</tr>
+<tr>
+<td><strong>A live data link to the real asset</strong></td>
+<td><code>core/can_telemetry.py</code> — the CAN bus carrying ECU/FADEC
+telemetry</td>
+</tr>
+<tr>
+<td><strong>Analytics that turn state into decisions</strong></td>
+<td><code>ml/</code> — anomaly detection, fault classification,
+remaining-useful-life, explanation</td>
+</tr>
+</tbody>
+</table>
+<h3 id="why-does-a-male-uav-need-this">Why does a MALE UAV need
+this?</h3>
+<ul>
+<li><strong>MALE</strong> = <strong>M</strong>edium
+<strong>A</strong>ltitude <strong>L</strong>ong
+<strong>E</strong>ndurance — a class of drone that flies for 18–50+
+hours at 3–9 km altitude, doing surveillance and reconnaissance.</li>
+<li>These aircraft use a <strong>piston engine</strong> (like a car
+engine: pistons, cylinders, spark, crankshaft), typically a turbocharged
+<strong>Rotax 914</strong> family engine.</li>
+<li>If that single engine fails mid-mission, the aircraft is lost or has
+to abort — expensive and operationally damaging.</li>
+<li>Today&#39;s engine monitors are <strong>threshold-based and
+reactive</strong>: they warn you <em>after</em> a temperature crosses a
+redline. By then the damage is done.</li>
+<li>We want <strong>predictive</strong>: detect the <em>trend</em>
+toward a failure, estimate <em>how long</em> you have, and tell the
+operator <em>what to do</em> — while there&#39;s still time to act.</li>
+</ul>
+<h3 id="what-the-brief-asked-for-and-what-we-built">What the brief asked
+for (and what we built)</h3>
+<p>The brief lists deliverables A–F: a digital-twin core, a
+health-monitoring system, fault detection + predictive analytics, an
+AI/ML layer, simulation &amp; replay, and a visualisation dashboard.
+Everything in this repo maps to one of those. Where we deviated, <a href="#7-design-decisions-and-trade-offs">Section 7</a> explains why —
+the brief explicitly invites a better approach if it&#39;s justified.</p>
+<hr />
+<h2 id="2-glossary">2. Glossary</h2>
+<p>Every abbreviation used in the code, the UI, or this document.</p>
+<h3 id="engine-parameters">Engine parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Short</th>
+<th>Full form</th>
+<th>What it is</th>
+<th>Why the twin watches it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RPM</strong></td>
+<td>Revolutions Per Minute</td>
+<td>Crankshaft rotational speed</td>
+<td>Primary measure of how hard the engine is working; every other
+expected value is a function of RPM and throttle</td>
+</tr>
+<tr>
+<td><strong>CHT</strong></td>
+<td>Cylinder Head Temperature</td>
+<td>Temperature of the aluminium head casting around each combustion
+chamber (°C)</td>
+<td>Redline 150 °C. A rising CHT means heat isn&#39;t being carried away —
+blocked cooling, wrong mixture, or detonation. Sustained overheat cracks
+the head</td>
+</tr>
+<tr>
+<td><strong>EGT</strong></td>
+<td>Exhaust Gas Temperature</td>
+<td>Temperature of the burnt gas leaving each cylinder (°C), ~800 °C at
+cruise</td>
+<td>Tells you about the <em>combustion</em> itself. A lean mixture runs
+hotter; a dead cylinder runs cold. Comparing the four cylinders&#39; EGTs
+catches a single bad one</td>
+</tr>
+<tr>
+<td><strong>MAP</strong></td>
+<td>Manifold Absolute Pressure (also &quot;manifold pressure&quot;)</td>
+<td>Air pressure inside the intake manifold, measured in inches of
+mercury (inHg)</td>
+<td>How much air the engine is breathing. A turbocharger <em>raises</em>
+MAP above ambient to restore power at altitude. Falling MAP at constant
+throttle = induction leak or turbo failure</td>
+</tr>
+<tr>
+<td><strong>Oil Pressure</strong></td>
+<td>—</td>
+<td>Pressure the oil pump develops to push oil through the bearings
+(bar)</td>
+<td>The single most safety-critical parameter. Below ~1.5 bar in flight,
+bearings start to fail; total loss = seizure within minutes</td>
+</tr>
+<tr>
+<td><strong>Oil Temp</strong></td>
+<td>Oil Temperature</td>
+<td>Bulk temperature of the engine oil (°C)</td>
+<td>Rises with load and with friction. A climbing oil temp <em>with</em>
+falling oil pressure = the lubrication system is losing the fight</td>
+</tr>
+<tr>
+<td><strong>Fuel Flow</strong></td>
+<td>—</td>
+<td>Rate the engine is consuming fuel, litres per hour (LPH)</td>
+<td>Proportional to power. If fuel flow doesn&#39;t match the power the
+engine is making, the fuel metering (injectors, pump) is suspect</td>
+</tr>
+<tr>
+<td><strong>Vibration RMS</strong></td>
+<td>Vibration, Root-Mean-Square</td>
+<td>A single number summarising vibration amplitude, in units of g (1 g
+= 9.81 m/s²). RMS = √(mean of squared samples) over a short window</td>
+<td>Mechanical health. A misfire, an imbalanced prop, or a failing
+bearing all raise vibration</td>
+</tr>
+<tr>
+<td><strong>Battery Voltage</strong></td>
+<td>—</td>
+<td>Voltage of the aircraft electrical bus (V), nominal 13.8 V</td>
+<td>If it sags below ~12.4 V the alternator/charging system has failed;
+the ECU and avionics are now on a countdown</td>
+</tr>
+<tr>
+<td><strong>Injection timing</strong></td>
+<td>—</td>
+<td>Crank angle before top-dead-centre at which fuel is injected
+(degrees BTDC)</td>
+<td>Wrong timing = rough running, lost power, high EGT. Listed in the
+brief; modelled as a nominal + tolerance in the spec file</td>
+</tr>
+<tr>
+<td><strong>IAS</strong></td>
+<td>Indicated AirSpeed</td>
+<td>Airspeed as read from pitot pressure, in knots (kts; 1 kt ≈ 0.514
+m/s)</td>
+<td>Faster airflow = more <strong>ram-air cooling</strong> over the
+cylinders. The physics model subtracts a cooling term proportional to
+throttle/airspeed</td>
+</tr>
+<tr>
+<td><strong>BTDC</strong></td>
+<td>Before Top Dead Centre</td>
+<td>Crank position reference for ignition/injection timing</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>TDC</strong></td>
+<td>Top Dead Centre</td>
+<td>Piston at the very top of its stroke</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="atmosphere--flight">Atmosphere &amp; flight</h3>
+<table>
+<thead>
+<tr>
+<th>Short</th>
+<th>Full form</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ISA</strong></td>
+<td>International Standard Atmosphere</td>
+<td>An agreed reference model: 15 °C and 101 325 Pa at sea level,
+temperature dropping 6.5 °C per 1000 m. Used so &quot;expected&quot; values are
+defined against a standard day</td>
+</tr>
+<tr>
+<td><strong>Altitude</strong></td>
+<td>—</td>
+<td>Height above sea level (m or ft; 1 ft = 0.3048 m). Higher = thinner
+air = less oxygen = less power and less cooling</td>
+</tr>
+<tr>
+<td><strong>Density ratio</strong></td>
+<td>—</td>
+<td>Local air density ÷ sea-level ISA density. Multiplies the power/fuel
+terms</td>
+</tr>
+<tr>
+<td><strong>Critical altitude</strong></td>
+<td>—</td>
+<td>The altitude up to which a turbocharger can still maintain full
+rated manifold pressure (~5000 m here). Above it, boost — and power —
+fall off</td>
+</tr>
+<tr>
+<td><strong>Phase / stage</strong></td>
+<td>—</td>
+<td>Which part of the flight: taxi, climb, cruise, loiter,
+descent/recovery</td>
+</tr>
+<tr>
+<td><strong>Loiter</strong></td>
+<td>—</td>
+<td>Flying a holding pattern over a target area — the bulk of an ISR
+mission</td>
+</tr>
+<tr>
+<td><strong>ISR</strong></td>
+<td>Intelligence, Surveillance, Reconnaissance</td>
+<td>The mission these UAVs fly</td>
+</tr>
+</tbody>
+</table>
+<h3 id="systems--protocols">Systems &amp; protocols</h3>
+<table>
+<thead>
+<tr>
+<th>Short</th>
+<th>Full form</th>
+<th>What it is</th>
+<th>Role here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>UAV</strong></td>
+<td>Unmanned Aerial Vehicle</td>
+<td>A drone</td>
+<td>The platform</td>
+</tr>
+<tr>
+<td><strong>MALE</strong></td>
+<td>Medium Altitude Long Endurance</td>
+<td>UAV class: ~3–9 km, 18–50 h</td>
+<td>The specific platform class</td>
+</tr>
+<tr>
+<td><strong>GCS</strong></td>
+<td>Ground Control Station</td>
+<td>The ground operator&#39;s console and radios</td>
+<td>Where this dashboard would run</td>
+</tr>
+<tr>
+<td><strong>ECU</strong></td>
+<td>Engine Control Unit</td>
+<td>The engine&#39;s embedded computer</td>
+<td>Source of all telemetry</td>
+</tr>
+<tr>
+<td><strong>FADEC</strong></td>
+<td>Full Authority Digital Engine Control</td>
+<td>An ECU that has <em>complete</em> control of the engine (throttle,
+mixture, ignition, boost) with no mechanical backup</td>
+<td>The real-world telemetry source we emulate</td>
+</tr>
+<tr>
+<td><strong>CAN</strong></td>
+<td>Controller Area Network</td>
+<td>A robust 2-wire differential serial bus, invented for cars,
+universal in aerospace/automotive. Messages = an 11-bit ID + up to 8
+data bytes, broadcast to all nodes</td>
+<td>Our telemetry transport</td>
+</tr>
+<tr>
+<td><strong>SocketCAN</strong></td>
+<td>—</td>
+<td>The Linux kernel&#39;s CAN networking stack; lets you treat a CAN
+interface like a network socket</td>
+<td>The one-line change to go from our virtual bus to real hardware</td>
+</tr>
+<tr>
+<td><strong>DBC</strong></td>
+<td>Database CAN (file format)</td>
+<td>A text file that defines which signal lives in which byte of which
+CAN message, with scale/offset</td>
+<td>Our <code>FRAME_MAP</code> is a hand-coded DBC equivalent</td>
+</tr>
+<tr>
+<td><strong>MQTT</strong></td>
+<td>Message Queuing Telemetry Transport</td>
+<td>A lightweight publish/subscribe messaging protocol over TCP</td>
+<td>The <em>old</em> pipeline&#39;s transport; kept in <code>legacy/</code>
+for fleet deployment</td>
+</tr>
+<tr>
+<td><strong>RTL / RTB</strong></td>
+<td>Return To Launch / Return To Base</td>
+<td>Abort the mission and fly home</td>
+<td>The advisory the twin issues on a critical fault</td>
+</tr>
+<tr>
+<td><strong>HIL</strong></td>
+<td>Hardware In the Loop</td>
+<td>A test rig where real hardware runs against a simulated
+environment</td>
+<td>A deployment stage</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ai--ml--stats">AI / ML / stats</h3>
+<table>
+<thead>
+<tr>
+<th>Short</th>
+<th>Full form</th>
+<th>What it is</th>
+<th>Role here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ML</strong></td>
+<td>Machine Learning</td>
+<td>Models that learn patterns from data rather than being explicitly
+programmed</td>
+<td>The fault classifier, anomaly detector, RUL regressor</td>
+</tr>
+<tr>
+<td><strong>RUL</strong></td>
+<td>Remaining Useful Life</td>
+<td>Estimated time until the asset can no longer perform its function —
+here, time to mission abort</td>
+<td>A headline number on the dashboard</td>
+</tr>
+<tr>
+<td><strong>Anomaly detection</strong></td>
+<td>—</td>
+<td>Deciding whether the current state is &quot;not normal&quot; <em>without</em>
+being told what the fault is</td>
+<td><code>IsolationForest</code> + our residual gate</td>
+</tr>
+<tr>
+<td><strong>Isolation Forest</strong></td>
+<td>—</td>
+<td>An unsupervised anomaly algorithm. It builds random trees; points
+that get &quot;isolated&quot; (cut off) with very few splits are outliers. Trained
+only on healthy data</td>
+<td>Corroborating anomaly signal</td>
+</tr>
+<tr>
+<td><strong>XGBoost</strong></td>
+<td>eXtreme Gradient Boosting</td>
+<td>A high-performance library that builds an <em>ensemble of decision
+trees</em>, each new tree correcting the previous ensemble&#39;s errors
+(gradient boosting). Fast, accurate on tabular data, and — crucially —
+explainable</td>
+<td>Fault classifier and the (cross-check) RUL regressor</td>
+</tr>
+<tr>
+<td><strong>Gradient boosting</strong></td>
+<td>—</td>
+<td>Train trees sequentially; each fits the <em>residual error</em> of
+the running total. Sum of all trees = prediction</td>
+<td>How XGBoost works internally</td>
+</tr>
+<tr>
+<td><strong>Classifier</strong></td>
+<td>—</td>
+<td>A model that outputs a category (here: one of 5 fault labels) plus a
+probability per category</td>
+<td><code>fault_classifier.joblib</code></td>
+</tr>
+<tr>
+<td><strong>Regressor</strong></td>
+<td>—</td>
+<td>A model that outputs a continuous number (here: seconds of RUL)</td>
+<td><code>rul_regressor.joblib</code> (kept as cross-check only)</td>
+</tr>
+<tr>
+<td><strong>Softmax</strong></td>
+<td>—</td>
+<td>Turns a vector of raw model scores into probabilities that sum to
+1</td>
+<td>Gives the &quot;Anomaly 100%&quot; confidence number</td>
+</tr>
+<tr>
+<td><strong>Feature</strong></td>
+<td>—</td>
+<td>One input number to the model (e.g. <code>cht_residual</code>,
+<code>vibration_roll_std</code>)</td>
+<td>We build 36 per frame</td>
+</tr>
+<tr>
+<td><strong>Residual</strong></td>
+<td>—</td>
+<td>measured − expected. The core quantity in this project</td>
+<td>Physics subtracts the operating point; ML works on what&#39;s left</td>
+</tr>
+<tr>
+<td><strong>Rolling window / rolling statistic</strong></td>
+<td>—</td>
+<td>A statistic (mean, std) computed over the last <em>N</em> seconds of
+a signal, recomputed every step</td>
+<td>Captures trend and noisiness, not just the instantaneous value</td>
+</tr>
+<tr>
+<td><strong>RMS</strong></td>
+<td>Root Mean Square</td>
+<td>√(mean of squares). A magnitude summary that doesn&#39;t cancel out like
+a plain mean would</td>
+<td>Vibration channel</td>
+</tr>
+<tr>
+<td><strong>SHAP</strong></td>
+<td>SHapley Additive exPlanations</td>
+<td>A method from cooperative game theory. It fairly distributes a
+prediction among its input features by asking &quot;how much did each feature
+contribute vs. its average?&quot; Contributions sum exactly to (prediction −
+baseline)</td>
+<td>The &quot;root cause&quot; bar chart</td>
+</tr>
+<tr>
+<td><strong>Shapley value</strong></td>
+<td>—</td>
+<td>The game-theory quantity SHAP computes: the average marginal
+contribution of a player (feature) across all possible coalitions
+(feature subsets)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>TreeSHAP</strong></td>
+<td>—</td>
+<td>An algorithm that computes exact SHAP values for tree ensembles in
+polynomial time (naive SHAP is exponential). This is why real-time SHAP
+is even possible</td>
+<td>Makes per-frame explanation feasible (~20 ms)</td>
+</tr>
+<tr>
+<td><strong>Background / reference distribution</strong></td>
+<td>—</td>
+<td>The set of &quot;typical&quot; data points SHAP compares against to define
+&quot;average&quot;. We cache 50 healthy feature vectors</td>
+<td><code>ml/explainability.py:make_background()</code></td>
+</tr>
+<tr>
+<td><strong>tree_path_dependent</strong></td>
+<td>—</td>
+<td>A TreeSHAP mode that uses the tree&#39;s own training-data coverage as
+the reference, so it needs no external background and tolerates
+categorical splits</td>
+<td>The mode we actually run</td>
+</tr>
+<tr>
+<td><strong>ROC-AUC</strong></td>
+<td>Receiver Operating Characteristic — Area Under Curve</td>
+<td>A score from 0.5 (random) to 1.0 (perfect) measuring how well a
+detector <em>ranks</em> anomalies above normals across all
+thresholds</td>
+<td>Anomaly detector: 0.77</td>
+</tr>
+<tr>
+<td><strong>F1 score</strong></td>
+<td>—</td>
+<td>Harmonic mean of precision and recall for one class. Balances &quot;don&#39;t
+cry wolf&quot; against &quot;don&#39;t miss it&quot;</td>
+<td>Per fault class</td>
+</tr>
+<tr>
+<td><strong>Macro-F1</strong></td>
+<td>—</td>
+<td>The plain average of the per-class F1 scores (every class counts
+equally, regardless of how common it is)</td>
+<td>Fault classifier: <strong>0.95</strong></td>
+</tr>
+<tr>
+<td><strong>Precision</strong></td>
+<td>—</td>
+<td>Of the times the model said &quot;fault X&quot;, how often was it right</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Recall</strong></td>
+<td>—</td>
+<td>Of the actual &quot;fault X&quot; cases, how many did the model catch</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>MAE</strong></td>
+<td>Mean Absolute Error</td>
+<td>Average of</td>
+<td>predicted − actual</td>
+</tr>
+<tr>
+<td><strong>R²</strong></td>
+<td>Coefficient of determination</td>
+<td>1.0 = perfect, 0 = no better than predicting the mean,
+<strong>negative = worse than predicting the mean</strong></td>
+<td>RUL regressor: −1.7 → why we don&#39;t use it as the headline</td>
+</tr>
+<tr>
+<td><strong>Split by flight</strong></td>
+<td>—</td>
+<td>When making train/test sets, keep whole flights together — never let
+rows from one flight land in both. Prevents the model from &quot;memorising&quot;
+a flight it will be tested on (data leakage)</td>
+<td>How <code>ml/train.py</code> splits</td>
+</tr>
+<tr>
+<td><strong>Data leakage</strong></td>
+<td>—</td>
+<td>When information from the test set sneaks into training, inflating
+scores dishonestly</td>
+<td>Avoided by split-by-flight and by never using ground-truth labels as
+features</td>
+</tr>
+<tr>
+<td><strong>PINN / physics-informed</strong></td>
+<td>Physics-Informed (Neural Network / model)</td>
+<td>An ML approach where physical laws are baked into the model or its
+inputs, so it needs less data and generalises better</td>
+<td>Our residual approach is a lightweight version of this</td>
+</tr>
+<tr>
+<td><strong>Determinism</strong></td>
+<td>—</td>
+<td>Same inputs → byte-identical outputs every run. Achieved with fixed
+random seeds</td>
+<td>Every scenario is reproducible for the demo</td>
+</tr>
+</tbody>
+</table>
+<h3 id="software--infra">Software / infra</h3>
+<table>
+<thead>
+<tr>
+<th>Short</th>
+<th>Full form</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>API</strong></td>
+<td>Application Programming Interface</td>
+<td>The set of functions a module exposes to the rest of the code</td>
+</tr>
+<tr>
+<td><strong>ODE</strong></td>
+<td>Ordinary Differential Equation</td>
+<td>An equation relating a quantity to its rate of change. The thermal
+lag <code>dT/dt = (T_target − T)/τ</code> is a first-order ODE</td>
+</tr>
+<tr>
+<td><strong>EMA</strong></td>
+<td>Exponential Moving Average</td>
+<td>A running average that weights recent samples more:
+<code>ema ← α·new + (1−α)·ema</code>. Used for the CAN FPS readout</td>
+</tr>
+<tr>
+<td><strong>FPS</strong></td>
+<td>Frames Per Second</td>
+<td>Here: telemetry samples processed per second</td>
+</tr>
+<tr>
+<td><strong>YAML</strong></td>
+<td>YAML Ain&#39;t Markup Language</td>
+<td>A human-readable config file format</td>
+</tr>
+<tr>
+<td><strong>venv</strong></td>
+<td>Virtual environment</td>
+<td>An isolated Python install (<code>uav_env/</code>) so dependencies
+don&#39;t clash with the system</td>
+</tr>
+<tr>
+<td><strong>joblib</strong></td>
+<td>—</td>
+<td>A Python library for saving/loading trained models to disk
+(<code>.joblib</code> files)</td>
+</tr>
+<tr>
+<td><strong>Streamlit</strong></td>
+<td>—</td>
+<td>A Python framework that turns a script into a web app; re-runs the
+whole script on every interaction</td>
+</tr>
+<tr>
+<td><strong>Plotly</strong></td>
+<td>—</td>
+<td>The charting library used for every graph</td>
+</tr>
+<tr>
+<td><strong>struct</strong></td>
+<td>—</td>
+<td>Python&#39;s module for packing/unpacking binary data — used to build
+the CAN byte frames</td>
+</tr>
+<tr>
+<td><strong>uint16</strong></td>
+<td>unsigned 16-bit integer</td>
+<td>A whole number 0–65535, two bytes. Each CAN signal is encoded as
+one</td>
+</tr>
+<tr>
+<td><strong>big-endian</strong></td>
+<td>—</td>
+<td>Byte order: most-significant byte first. The CAN convention we use
+(<code>&gt;</code> in <code>struct</code>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-domain-primer">3. Domain primer</h2>
+<p>You will be asked &quot;do you actually understand the engine?&quot; Here&#39;s
+enough to answer with confidence.</p>
+<h3 id="31-how-a-4-stroke-piston-aero-engine-makes-power">3.1 How a
+4-stroke piston aero-engine makes power</h3>
+<ol type="1">
+<li><strong>Intake:</strong> piston moves down, drawing an air+fuel
+mixture into the cylinder through the intake <strong>manifold</strong>.
+A <strong>turbocharger</strong> (driven by exhaust gas) compresses the
+incoming air first, so even in thin high-altitude air the cylinder gets
+a sea-level-like charge. The pressure in the manifold is
+<strong>MAP</strong>.</li>
+<li><strong>Compression:</strong> piston moves up, squeezing the
+mixture.</li>
+<li><strong>Combustion (power):</strong> a spark ignites the mixture
+near <strong>TDC</strong> (top dead centre). The burning gas expands
+violently, driving the piston down — this is the only stroke that
+produces power. Peak gas temperature here shows up downstream as
+<strong>EGT</strong>.</li>
+<li><strong>Exhaust:</strong> piston moves up again, pushing burnt gas
+out past the exhaust valve and over the turbo.</li>
+</ol>
+<p>Four cylinders fire in sequence, turning the
+<strong>crankshaft</strong>, whose speed is <strong>RPM</strong>. The
+crank drives the <strong>propeller</strong>. Engine power ≈ how much air
+it can pump (MAP × RPM) × how efficiently it burns it.</p>
+<h3 id="32-where-the-heat-goes-and-why-cht-matters">3.2 Where the heat
+goes (and why CHT matters)</h3>
+<p>Only ~⅓ of the fuel&#39;s energy becomes propeller thrust. Roughly
+another third leaves as hot exhaust (<strong>EGT</strong>), and the last
+third has to be removed from the engine metal or it melts. On these
+engines that&#39;s done by:</p>
+<ul>
+<li><strong>Air cooling</strong> over the cylinder heads — proportional
+to airspeed and to the cooling-duct airflow (<strong>ram-air
+cooling</strong>), and</li>
+<li><strong>Oil</strong> carrying heat from the bearings and piston
+undersides to an oil cooler.</li>
+</ul>
+<p><strong>CHT</strong> is the temperature of the head metal. If cooling
+airflow drops (blocked duct, thin air, low airspeed) or combustion runs
+too hot (lean mixture, detonation), CHT climbs toward its 150 °C
+redline. That&#39;s the <strong>cooling-degradation</strong> failure
+mode.</p>
+<h3 id="33-why-oil-pressure-is-the-scariest-gauge">3.3 Why oil pressure
+is the scariest gauge</h3>
+<p>The crankshaft and connecting-rod bearings are plain bearings — metal
+surfaces separated only by a pressurised film of oil. Lose the pressure
+and the metal contacts, generates heat, welds, and the engine seizes —
+often within a couple of minutes. So a <strong>falling oil pressure
+trend</strong> is the highest-priority thing a twin can catch early.
+That&#39;s the <strong>lubrication-loss</strong> failure mode, and it&#39;s the
+only scenario with a hard RUL countdown to seizure.</p>
+<h3 id="34-what-a-misfire-looks-like">3.4 What a misfire looks like</h3>
+<p>If one cylinder stops burning properly (a clogged injector starves it
+of fuel, or a weak spark), that cylinder:</p>
+<ul>
+<li>produces <strong>little or no power</strong> → the engine loses ~25%
+power and the crank speed becomes uneven → <strong>vibration</strong>
+rises,</li>
+<li>exhausts <strong>cooler gas</strong> (or unburnt fuel) →
+<strong>that cylinder&#39;s EGT drops</strong> well below the other
+three.</li>
+</ul>
+<p>A single mean EGT can&#39;t see this — you need <strong>per-cylinder
+EGT</strong>. When <code>max(EGT) − min(EGT)</code> across the four
+cylinders exceeds ~90 °C, that&#39;s a misfire signature. This is exactly
+how real engine analysers (JPI, Electronics International) work.</p>
+<h3 id="35-sensor-faults-vs-engine-faults">3.5 Sensor faults vs. engine
+faults</h3>
+<p>Not every bad reading means a sick engine. A <strong>CHT sensor
+drift</strong> — the thermocouple slowly develops a bias — makes the
+gauge read 40 °C high while the engine is perfectly fine. A naive
+threshold monitor screams &quot;overheat!&quot; and the operator needlessly
+aborts. A good twin notices that CHT rose <em>but EGT, oil temp and
+everything else stayed normal</em> — inconsistent with real overheating
+— and reports <strong>sensor drift</strong>, not engine fault. This is
+the <code>sensor_drift_cht</code> scenario and it&#39;s the subtlest
+one.</p>
+<hr />
+<h2 id="4-system-architecture">4. System architecture</h2>
+<h3 id="41-the-pipeline-one-process-top-to-bottom">4.1 The pipeline (one
+process, top to bottom)</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────────────────────┐
+│  core/scenario_runner.py        Deterministic flight generator               │
+│    • picks a 180-second mission: TAXI→CLIMB→CRUISE→LOITER→EMERGENCY RECOVERY  │
+│    • drives engine_simulator_v2&#39;s physics with throttle/altitude/ambient     │
+│    • injects the scenario&#39;s fault at its onset time                          │
+│    • emits a telemetry dict: RPM, CHT×4, EGT×4, oil P/T, fuel, MAP, vib,     │
+│      altitude, airspeed, battery … + ground-truth label (validation only)    │
+└───────────────┬─────────────────────────────────────────────────────────────┘
+                │  one sample every 0.5 s of engine time (2 Hz)
+                ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  core/can_telemetry.py          Virtual CAN / FADEC bus (python-can)         │
+│    • PACK: 20 signals → 5 CAN frames, IDs 0x100–0x104, 8 bytes each,         │
+│      each value scaled to a uint16 and struct-packed big-endian              │
+│    • the twin side only ever sees data that survived pack → wire → unpack    │
+│    • DECODE: frames → engineering-units dict; recompute mean CHT/EGT         │
+└───────────────┬─────────────────────────────────────────────────────────────┘
+                │  decoded telemetry
+                ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  core/physics_model.py          Physics-informed baseline  X_physics(t)      │
+│    • from throttle, altitude, ambient ONLY, compute what a HEALTHY engine    │
+│      should read: ISA atmosphere → turbo model → load → temps → pressures    │
+│    • residual  R(t) = X_measured(t) − X_physics(t)   per sensor              │
+│    • normalised residual  = R / tolerance   (drives the &quot;cognition&quot; radar)   │
+│    • subsystem health indices 0–100 from the residuals                       │
+└───────────────┬─────────────────────────────────────────────────────────────┘
+                │  residual vector + health
+                ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  ml/models.py                   ML inference layer                           │
+│    • FeatureBuilder: 36 features (per sensor: residual, 60-s rolling mean &amp;  │
+│      std, per-10-s rate) + throttle/alt/ambient + time-in-anomaly            │
+│    • IsolationForest → raw anomaly flag (corroboration)                      │
+│    • XGBoost classifier → fault label + confidence   (the real detector)     │
+│    • RulEstimator → physics trend RUL (headline)                             │
+│    • XGBoost RUL regressor → cross-check number only                         │
+│    • anomaly = classifier_hit AND residual-gate AND (persistent OR severe)   │
+└───────────────┬─────────────────────────────────────────────────────────────┘
+                │  fault, confidence, health, RUL, feature row
+                ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  ml/explainability.py           Real-time TreeSHAP   (only on anomaly frames)│
+│    • one TreeExplainer built at startup, primed on 50 cached healthy vectors │
+│    • get_live_explanation() → top-3 signed feature contributions, ~20 ms     │
+└───────────────┬─────────────────────────────────────────────────────────────┘
+                │  top-3 drivers
+                ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  core/twin_pipeline.py          Wiring + operator advisory rules             │
+│    • build_advisory(fault, health, RUL, egt_spread) → concrete crew action  │
+│      + urgency tier (nominal / caution / warning / critical)                 │
+│    • assembles the &quot;enriched frame&quot; and appends it to a 600-frame buffer     │
+└───────────────┬─────────────────────────────────────────────────────────────┘
+                │  enriched frame
+                ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  dashboard/app.py + components.py   Streamlit GCS console                    │
+│    • scenario hot-swap, Play/Pause, 1×/2×/5×, Inject Fault, Reset            │
+│    • metric strip, mission-lifecycle timeline, twin-cognition radar,         │
+│      measured-vs-physics track, live SHAP bar, per-cylinder EGT,             │
+│      operator advisory console, validation footer                           │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+<h3 id="42-why-one-process-and-not-the-original-4-process-mqtt-design">4.2
+Why one process (and not the original 4-process MQTT design)</h3>
+<p>The starting code ran <strong>four separate programs</strong> talking
+over an <strong>MQTT</strong> broker: <code>broker</code> ←
+<code>mqtt_publisher.py</code> (sim) → <code>Digital_twin_core.py</code>
+(inference) → <code>dashboard.py</code>. That is a good architecture for
+a <em>fielded</em> system where the engine and the ground station are
+physically separate. For a <strong>4-minute jury demo</strong> it is a
+liability: you have to start four things in the right order, the broker
+can race, and there&#39;s nothing on screen that the extra moving parts
+justify.</p>
+<p>So the demo is <strong>one process</strong>:
+<code>dashboard/app.py</code> owns the scenario runner, the CAN bus, the
+models and SHAP, and steps them inside its own run loop. The MQTT
+version is preserved <strong>unchanged</strong> in <code>legacy/</code>
+and is the documented path for fleet deployment (<a href="#9-deployment-roadmap">Section 9</a>).</p>
+<p><strong>This is a strength, not a shortcut</strong> — you kept the
+distributed design <em>and</em> made a demo that starts with one
+command. Say exactly that if asked.</p>
+<h3 id="43-repo-map">4.3 Repo map</h3>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Full form / role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>config/engine_specs.yaml</code></td>
+<td>Single source of truth: Rotax-914 nominal values, redlines, residual
+tolerances, subsystem map</td>
+</tr>
+<tr>
+<td><code>core/physics_model.py</code></td>
+<td>Steady-state thermodynamic expected-value model + residual +
+health</td>
+</tr>
+<tr>
+<td><code>core/scenario_runner.py</code></td>
+<td>4 deterministic 3-minute scenarios + randomised-flight factory for
+training</td>
+</tr>
+<tr>
+<td><code>core/can_telemetry.py</code></td>
+<td>Virtual CAN transport: pack telemetry → frames 0x100–0x104, decode
+back</td>
+</tr>
+<tr>
+<td><code>core/twin_pipeline.py</code></td>
+<td>Wires the whole pipeline; steps one frame; also runs headless</td>
+</tr>
+<tr>
+<td><code>engine_simulator_v2.py</code></td>
+<td>The underlying physics simulator (pre-existing, reused): ODE thermal
+integration, per-cylinder modelling, fault injection</td>
+</tr>
+<tr>
+<td><code>ml/dataset.py</code></td>
+<td>Generates the training set from the scenario physics</td>
+</tr>
+<tr>
+<td><code>ml/train.py</code></td>
+<td>Trains the 3 models → <code>models/</code></td>
+</tr>
+<tr>
+<td><code>ml/models.py</code></td>
+<td>Model loaders (+ fallback), streaming feature builder, hybrid
+RUL</td>
+</tr>
+<tr>
+<td><code>ml/explainability.py</code></td>
+<td><code>LiveExplainer</code> — cached TreeSHAP</td>
+</tr>
+<tr>
+<td><code>dashboard/app.py</code></td>
+<td>Streamlit GCS console + run loop</td>
+</tr>
+<tr>
+<td><code>dashboard/components.py</code></td>
+<td>Plotly figure builders (no Streamlit calls)</td>
+</tr>
+<tr>
+<td><code>models/</code></td>
+<td>Live model artifacts (produced by <code>ml/train.py</code>)</td>
+</tr>
+<tr>
+<td><code>models_legacy_kaggle/</code></td>
+<td>Original Kaggle-trained artifacts, kept for comparison</td>
+</tr>
+<tr>
+<td><code>legacy/</code></td>
+<td>Original MQTT pipeline + training notebook + old dashboard</td>
+</tr>
+<tr>
+<td><code>run_demo.sh</code></td>
+<td>One-command launcher: dashboard / <code>--headless</code> /
+<code>--check</code> / <code>--train</code></td>
+</tr>
+<tr>
+<td><code>DESIGN_NOTES.md</code></td>
+<td>Short architecture + deviation summary</td>
+</tr>
+<tr>
+<td><code>docs/EXPLAINER.md</code></td>
+<td>This document</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-module-deep-dives">5. Module deep-dives</h2>
+<h3 id="51-configengine_specsyaml">5.1
+<code>config/engine_specs.yaml</code></h3>
+<p><strong>Why a config file at all?</strong> Two reasons a jury will
+appreciate:</p>
+<ol type="1">
+<li><strong>Auditability.</strong> A propulsion engineer can open one
+file and check every number against the Rotax operator manual — no
+hunting through code.</li>
+<li><strong>Certification.</strong> For a real defence system, the
+safety-relevant constants (redlines, tolerances) must be reviewable and
+change-controlled. Keeping them out of code is a step toward that.</li>
+</ol>
+<p><strong>What&#39;s in it:</strong></p>
+<ul>
+<li><code>engine:</code> nominal + redline values for RPM, MAP, CHT,
+EGT, oil pressure/temp, fuel flow, vibration, battery, injection timing;
+turbo critical altitude; cylinder count.</li>
+<li><code>thermal_time_constants_s:</code> how fast CHT (120 s), EGT (5
+s), oil temp (240 s) respond to a change — used for the lag model.</li>
+<li><code>residual_tolerance:</code> per-sensor &quot;how far from physics is
+still healthy&quot; band (RPM ±200, CHT ±12 °C, EGT ±40 °C, oil pressure ±0.5
+bar, …). <strong>These set the sensitivity of the whole twin.</strong>
+Tighten them → more sensitive, more false alarms. They were tuned so the
+nominal scenario sits at ~97–99 % health.</li>
+<li><code>subsystems:</code> which sensors roll up into
+<code>thermal_health</code>, <code>lubrication_health</code>,
+<code>combustion_health</code>, <code>electrical_health</code>.</li>
+<li><code>atmosphere:</code> ISA sea-level reference (15 °C, 101325 Pa,
+6.5 °C/km lapse rate).</li>
+</ul>
+<p>Loaded once and cached (<code>functools.lru_cache</code>).</p>
+<h3 id="52-corephysics_modelpy">5.2
+<code>core/physics_model.py</code></h3>
+<p><strong>This is the &quot;physics-informed&quot; half of &quot;physics-informed AI.&quot;
+Understand this section cold.</strong></p>
+<h4 id="the-idea">The idea</h4>
+<p>A pure data-driven monitor has to learn, from data, that &quot;cruise at 4
+km on a −12 °C day should have CHT ≈ 90 °C.&quot; That&#39;s a lot to learn, it
+needs data covering every altitude/temperature/throttle combination, and
+it breaks on conditions it never saw. Instead we
+<strong>compute</strong> the expected value from first principles, then
+let the ML work only on the <strong>residual</strong>
+(<code>measured − expected</code>). The operating point is subtracted
+out; the model only has to recognise &quot;fault-shaped&quot; residuals.</p>
+<h4 id="the-equations-all-in-expected_engine_values">The equations (all
+in <code>expected_engine_values()</code>)</h4>
+<p>Inputs: <code>throttle_pct</code>, <code>altitude_m</code>,
+<code>ambient_c</code>. Everything below is vectorised (works on arrays
+for training, scalars for live).</p>
+<p><strong>1. Atmosphere</strong> — the barometric formula (standard
+atmosphere pressure vs height):</p>
+<pre><code>pressure_pa = 101325 · (1 − 2.25577e-5 · altitude_m) ^ 5.25588</code></pre>
+<p>Air gets exponentially thinner with height. (Density then follows
+from the ideal gas law, <code>ρ = p / (R·T)</code>.)</p>
+<p><strong>2. Turbocharger model</strong> — a turbo restores sea-level
+manifold pressure up to a <strong>critical altitude</strong> (~5000 m),
+then can&#39;t keep up:</p>
+<pre><code>if altitude ≤ 5000 m:   turbo_map_ceiling = MAP_MAX,   density_ratio_effective = 1.0
+else:
+   excess = altitude − 5000
+   falloff = clip( (1 − 2.25577e-5 · excess) ^ 5.25588 ,  0.3, 1.0 )
+   turbo_map_ceiling = MAP_MAX · falloff
+   density_ratio_effective = falloff</code></pre>
+<p>This is why a MALE UAV uses a <em>turbocharged</em> engine — a
+naturally-aspirated one would lose too much power above 3–4 km.</p>
+<p><strong>3. Manifold pressure and RPM from throttle:</strong></p>
+<pre><code>MAP_expected = MAP_IDLE + throttle · (turbo_map_ceiling − MAP_IDLE)
+
+RPM_expected = { IDLE + (thr/0.5)·(CRUISE − IDLE)          if throttle ≤ 50%
+              { CRUISE + ((thr−0.5)/0.5)·(MAX − CRUISE)    if throttle &gt; 50%</code></pre>
+<p>Two straight-line segments anchored at the three spec points (idle
+1400, cruise 5000, max 5800). Simple, monotonic, no discontinuity at the
+join.</p>
+<p><strong>4. Engine load</strong> — the single number everything
+thermal depends on:</p>
+<pre><code>load_factor = (MAP_expected / MAP_MAX) · (RPM_expected / RPM_MAX)     [0 … ~1]</code></pre>
+<p>Physically: air pumped per unit time ÷ max air pumped per unit
+time.</p>
+<p><strong>5. Temperatures</strong> — two-segment interpolation anchored
+to real spec values, because a real engine has only a <em>narrow</em>
+gap between cruise and redline EGT (~100 °C) despite a big throttle
+change, so a single linear multiplier overshoots:</p>
+<pre><code>if load ≤ 0.7 (the &quot;cruise reference&quot; load):
+    frac = load / 0.7
+    EGT_expected = 420 + frac·(800 − 420)
+    CHT_expected =  90 + frac·(125 −  90)
+else:
+    frac = clip((load − 0.7) / 0.3, 0, 1.2)
+    EGT_expected = 800 + frac·(900 − 800)
+    CHT_expected = 125 + frac·(150 − 125)</code></pre>
+<p>Then CHT is corrected for the day and the cooling airflow:</p>
+<pre><code>CHT_expected += (ambient_c − 15)          # hotter day → hotter head
+CHT_expected -= throttle · 15             # more airspeed/duct flow → more cooling</code></pre>
+<p><strong>6. Oil, fuel, vibration, battery</strong> — each a simple
+monotonic function of load or RPM:</p>
+<pre><code>OilTemp_expected  = 60 + 40 · load · 1.2  + 0.5·(ambient−15) − 0.5·(throttle·15)
+OilPress_expected = 0.8 + (5.0 − 0.8) · (RPM_expected / RPM_MAX)     capped at 7.0
+Vibration_expected = 1.0 · (0.5 + 0.5 · load)
+FuelFlow_expected  = 25 · load · density_ratio_effective
+Battery_expected   = 13.8   (13.2 if RPM &lt; 2000, i.e. alternator barely spinning)</code></pre>
+<h4 id="from-expected-values-to-health">From expected values to
+health</h4>
+<pre><code>residual(sensor)            = measured − expected
+normalised_residual(sensor) = residual / tolerance(sensor)      # 0 = perfect, 1 = edge of healthy
+score(sensor)               = 100 · exp( −0.5 · ratio² / 4 )    # ratio = |normalised residual|
+subsystem_health            = mean( score  over that subsystem&#39;s sensors )
+health_index                = mean( the four subsystem healths )</code></pre>
+<p>The Gaussian <code>score</code> curve means: residual 0 → 100; at 1×
+tolerance → ~94; at 2× → ~78; at 3× → ~50; at 4× → ~28. Gentle near
+zero, punishing far out.</p>
+<h4 id="what-about-transients">What about transients?</h4>
+<p>The <em>steady-state</em> physics above assumes temperatures have
+settled. Real CHT lags throttle changes by ~2 minutes. The
+<strong>simulator</strong> applies that lag (see 5.3); the physics
+baseline does not. To keep the two comparable inside a 180-second window
+we (a) start the simulated engine already warm and (b) shorten the
+simulator&#39;s thermal time-constants for the compressed timeline. Result:
+on the nominal scenario the residuals stay small (health 97–99 %). This
+is discussed openly in <a href="#7-design-decisions-and-trade-offs">Section 7</a> and <a href="#12-known-limitations-and-honest-future-work">Section 12</a>.</p>
+<h3 id="53-corescenario_runnerpy">5.3
+<code>core/scenario_runner.py</code></h3>
+<p><strong>Purpose:</strong> generate <em>fresh, unseen</em> telemetry
+every run — not replay a CSV the model trained on. This directly answers
+the brief&#39;s &quot;replace self-looping training datasets with dynamic
+generation.&quot;</p>
+<h4 id="the-compressed-mission">The compressed mission</h4>
+<p>Every scenario is <strong>180 seconds</strong> and walks the full
+lifecycle:</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Time</th>
+<th>Throttle</th>
+<th>What&#39;s happening</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>TAXI</strong></td>
+<td>0–15 s</td>
+<td>15 %</td>
+<td>On the ground, engine idling</td>
+</tr>
+<tr>
+<td><strong>CLIMB</strong></td>
+<td>15–50 s</td>
+<td>88 %</td>
+<td>Full-power climb to cruise altitude</td>
+</tr>
+<tr>
+<td><strong>CRUISE</strong></td>
+<td>50–95 s</td>
+<td>66 %</td>
+<td>Transit to the operating area</td>
+</tr>
+<tr>
+<td><strong>LOITER</strong></td>
+<td>95–150 s</td>
+<td>55 %</td>
+<td>Holding pattern over the target (the bulk of an ISR mission)</td>
+</tr>
+<tr>
+<td><strong>EMERGENCY RECOVERY</strong></td>
+<td>150–180 s</td>
+<td>35 %</td>
+<td>Descent / divert</td>
+</tr>
+</tbody>
+</table>
+<p><code>MissionShape</code> defines <code>throttle_at(t)</code>,
+<code>altitude_at(t)</code>, <code>ambient_at(t)</code>,
+<code>airspeed_at(t)</code> as smooth functions of time, with a small
+<code>1.2·sin(t/7)</code> breathing term so the charts aren&#39;t dead-flat.
+Scenario-specific twists (e.g. an over-altitude climb) are layered on as
+bias functions.</p>
+<h4 id="how-a-scenario-runs">How a scenario runs</h4>
+<p><code>ScenarioRunner.step()</code> each tick:</p>
+<ol type="1">
+<li>Look up commanded throttle / altitude / ambient / airspeed for time
+<code>t</code>.</li>
+<li>Ask <code>FaultInjector</code> for the physical modifiers active at
+<code>t</code> (<code>cooling_health</code>,
+<code>lubrication_health</code>, <code>combustion_health</code>,
+<code>is_failed</code>).</li>
+<li>Call
+<code>EnginePhysicsModel.update(dt, throttle, altitude, ambient, mods)</code>
+— the pre-existing simulator (<code>engine_simulator_v2.py</code>) that
+does the <em>actual</em> physics with a proper <strong>ODE thermal
+integration</strong>
+<code>T ← T_target + (T − T_target)·e^(−dt/τ)</code>, per-cylinder
+manufacturing bias, turbo, and a coherent terminal-failure state.</li>
+<li>Apply sensor faults (e.g. CHT drift adds a growing bias to the
+<em>reading</em>).</li>
+<li>Apply the scenario&#39;s <code>shaping_fn</code> (e.g. push cylinder 3&#39;s
+EGT down for misfire).</li>
+<li>Emit the telemetry dict + the ground-truth <code>fault_label</code>
+and <code>remaining_useful_life</code>.</li>
+</ol>
+<h4 id="determinism">Determinism</h4>
+<p>Each scenario has a fixed integer seed (101/202/303/404). All
+randomness (sensor noise, cylinder bias, misfire timing) flows from that
+one seed, so a given scenario produces <strong>byte-identical</strong>
+telemetry every run — essential for a reproducible demo, and it means
+the four scenarios are always <em>out-of-sample</em> relative to the
+training set (which uses different seeds).</p>
+<h4 id="random_flight_spec"><code>random_flight_spec()</code></h4>
+<p>For training only: builds a randomised <code>ScenarioSpec</code> —
+random cruise altitude (3–7.2 km), random hot-weather flag, ~62 % chance
+of a fault, random fault type / onset / ramp / severity / seed.
+<code>ml/dataset.py</code> calls this 140 times.</p>
+<h3 id="54-corecan_telemetrypy">5.4
+<code>core/can_telemetry.py</code></h3>
+<p><strong>Purpose:</strong> make &quot;ingest ECU/FADEC telemetry over CAN&quot;
+concrete and inspectable, not a bullet point.</p>
+<h4 id="what-can-actually-is">What CAN actually is</h4>
+<p><strong>CAN</strong> (Controller Area Network) is the serial bus that
+engine ECUs, avionics and actuators use. Physically it&#39;s two twisted
+wires. Logically, each <strong>message</strong> is:</p>
+<ul>
+<li>an <strong>arbitration ID</strong> (11 bits — also sets priority),
+and</li>
+<li><strong>0–8 bytes</strong> of payload, broadcast to every node on
+the bus. There&#39;s no &quot;connection&quot; — nodes just publish messages with
+their ID and everyone who cares listens. A <strong>DBC</strong> file
+says which physical quantity lives in which bits of which message, and
+how to scale it.</li>
+</ul>
+<p>We use <strong><code>python-can</code></strong> with its
+<code>virtual</code> backend — a fully in-process bus with the real
+<code>python-can</code> API. Swapping to hardware is one line:
+<code>interface=&#39;virtual&#39;</code> →
+<code>interface=&#39;socketcan&#39;, channel=&#39;can0&#39;</code>.</p>
+<h4 id="our-message-set-a-hand-coded-dbc">Our message set (a hand-coded
+DBC)</h4>
+<p><code>FRAME_MAP</code> — 5 messages, IDs
+<code>0x100</code>–<code>0x104</code>, 8 bytes each = <strong>4 signals
+per message</strong> (<code>struct</code> format <code>&gt;4H</code> =
+big-endian, four unsigned 16-bit ints):</p>
+<pre><code>0x100  ENGINE_CORE    rpm | manifold_pressure | oil_pressure | oil_temp
+0x101  CHT_BANK       cht_1 | cht_2 | cht_3 | cht_4
+0x102  EGT_BANK       egt_1 | egt_2 | egt_3 | egt_4
+0x103  FLOW_DYNAMICS  fuel_flow_lph | vibration | altitude_ft | airspeed_kts
+0x104  AUX_STATE      battery_voltage | throttle_pct | ambient_c | mission_time</code></pre>
+<p>That&#39;s 20 signals, and it <em>includes per-cylinder CHT and EGT</em>
+— which is how a real engine analyser reports, and what the misfire
+detection needs.</p>
+<h4 id="encoding--how-a-float-becomes-bytes">Encoding — how a float
+becomes bytes</h4>
+<p>Each signal has a <code>scale</code> and an integer
+<code>offset</code>:</p>
+<pre><code>raw_uint16 = round(value / scale) + offset            clamped to 0 … 65535   (the wire form)
+value      = (raw_uint16 − offset) · scale                                    (decode)</code></pre>
+<ul>
+<li><code>scale</code> sets resolution and range. RPM uses
+<code>scale = 0.2</code> → 0–13107 RPM in 0.2-RPM steps. Oil pressure
+uses <code>0.0002</code> → 0–13.1 bar in fine steps.</li>
+<li><code>offset</code> lets a <strong>signed</strong> quantity fit an
+<strong>unsigned</strong> field. Ambient temperature can be −40 °C; with
+<code>scale = 0.005, offset = 10000</code>, −12.3 °C →
+<code>round(−12.3/0.005) + 10000 = 7540</code> on the wire → decodes
+back to −12.3 °C. (Getting this backwards was a real bug during the
+build — the twin saw +50 °C ambient and every CHT residual blew up.
+Fixing the encoder fixed it. Good story for &quot;how do you know it works?&quot;
+— because a scaling error is <em>visible</em>.)</li>
+</ul>
+<h4 id="decoding">Decoding</h4>
+<p><code>bus.poll()</code> drains all queued frames,
+<code>struct.unpack(&quot;&gt;4H&quot;, data)</code> each one, inverts the
+scale/offset, and merges into one telemetry dict. Mean CHT/EGT are
+recomputed from the four cylinder values. Metadata is attached:
+<code>_can_frames</code> (which IDs arrived), <code>_can_hex</code> (raw
+hex per frame), <code>_can_frame_count</code>, <code>_can_rx_ts</code>.
+A rolling <strong>EMA</strong> of the publish interval gives the &quot;CAN
+FPS&quot; readout.</p>
+<p>Try it:
+<code>python core/can_telemetry.py injector_misfire --dump</code> prints
+the hex.</p>
+<h4 id="fallback">Fallback</h4>
+<p>If <code>python-can</code> isn&#39;t installed, <code>_LoopbackBus</code>
+is used — same public methods, same byte framing (<code>struct</code> is
+stdlib), so the pipeline never notices.</p>
+<h3 id="55-mldatasetpy--mltrainpy">5.5 <code>ml/dataset.py</code> +
+<code>ml/train.py</code></h3>
+<h4 id="why-retrain-at-all">Why retrain at all?</h4>
+<p>The models shipped in the repo were trained (on Kaggle) on a
+<strong>static CSV</strong> sampled at <strong>0.1 Hz</strong> (one row
+per 10 s) over <strong>multi-hour</strong> flights. The demo streams a
+<strong>2 Hz</strong>, <strong>3-minute</strong> mission. Several
+features live on a <em>time scale</em>:</p>
+<ul>
+<li>rolling mean/std over &quot;6 samples&quot; is 60 s at 0.1 Hz but only 3 s at
+2 Hz,</li>
+<li><code>rate</code> as a &quot;sample-to-sample diff&quot; is a per-10-s change
+vs a per-0.5-s change,</li>
+<li><code>time_in_anomaly_state</code> counted samples, so its numeric
+range differs 20×.</li>
+</ul>
+<p>Feeding 2 Hz features to a 0.1 Hz-trained model is a
+<strong>train/serve skew</strong> and it showed (classifier collapsed to
+&quot;healthy&quot; for everything). Two ways to fix it: paper over the skew, or
+<strong>retrain on data that matches how the twin actually
+runs</strong>. We did the second — it&#39;s the honest fix and it&#39;s what the
+brief asks for (&quot;dynamic generation&quot;).</p>
+<h4 id="mldatasetpy"><code>ml/dataset.py</code></h4>
+<ul>
+<li><code>generate_flights(n)</code> — runs <code>n</code> randomised
+<code>ScenarioRunner</code> flights (via
+<code>random_flight_spec</code>), concatenates their telemetry with a
+<code>flight_id</code>.</li>
+<li><code>build_features_batch(df)</code> — the <strong>vectorised twin
+of the streaming <code>FeatureBuilder</code></strong>: identical
+residual definition, identical 60-s rolling window
+(<code>int(60·hz)</code> rows), identical per-10-s rate
+(<code>shift(int(10·hz))</code>), identical
+<code>time_in_anomaly_state = run_length · (1/hz) / 10</code>. Because
+training features and serving features come from code that is
+deliberately kept line-for-line equivalent, <strong>there is no
+train/serve skew by construction.</strong></li>
+</ul>
+<h4 id="mltrainpy"><code>ml/train.py</code></h4>
+<ol type="1">
+<li>Generate 140 randomised flights → ~50 000 rows.</li>
+<li><strong>Split by flight</strong>, 80/20 — whole flights go to train
+<em>or</em> test, never both. No row-level leakage; the test flights are
+genuinely unseen.</li>
+<li>Train three models:
+<ul>
+<li><strong>Anomaly</strong> —
+<code>IsolationForest(n_estimators=250, contamination=0.03)</code> on
+the <strong>healthy rows only</strong>. It learns the shape of the
+healthy residual cloud.</li>
+<li><strong>Fault classifier</strong> —
+<code>XGBClassifier(n_estimators=350, max_depth=6, learning_rate=0.08, subsample=0.85, colsample_bytree=0.85)</code>,
+<code>objective=&quot;multi:softprob&quot;</code> over the 5 labels.</li>
+<li><strong>RUL regressor</strong> —
+<code>XGBRegressor(n_estimators=400, max_depth=5, learning_rate=0.06)</code>
+on the rows that have a real countdown (degradation faults only).</li>
+</ul></li>
+<li>Save to <code>models/</code>, write
+<code>models/metrics.json</code>.</li>
+</ol>
+<p>Runs in ~20 s. <code>./run_demo.sh --train</code> reruns it.</p>
+<h3 id="56-mlmodelspy">5.6 <code>ml/models.py</code></h3>
+<h4 id="the-36-features-get_feature_columns">The 36 features
+(<code>get_feature_columns()</code>)</h4>
+<p>For each of the 8 sensors
+<code>[rpm, cht, egt, oil_pressure, oil_temp, fuel_flow, vibration, battery_voltage]</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Meaning</th>
+<th>Why it helps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;s&gt;_residual</code></td>
+<td>measured − physics-expected</td>
+<td>The core signal — operating point removed</td>
+</tr>
+<tr>
+<td><code>&lt;s&gt;_roll_mean</code></td>
+<td>mean of the sensor over the last 60 s</td>
+<td>Smooths noise; captures the current level</td>
+</tr>
+<tr>
+<td><code>&lt;s&gt;_roll_std</code></td>
+<td>std dev over the last 60 s</td>
+<td><strong>Roughness</strong> — jumps when a misfire or bearing problem
+starts</td>
+</tr>
+<tr>
+<td><code>&lt;s&gt;_rate</code></td>
+<td>change over the last 10 s</td>
+<td><strong>Trend direction and speed</strong> — a slow drift vs a fast
+collapse</td>
+</tr>
+</tbody>
+</table>
+<p>Plus 4 context features: <code>throttle_pct</code>,
+<code>altitude_m</code>, <code>ambient_c</code>,
+<code>time_in_anomaly_state</code> (how long, in 10-s units, a residual
+has been outside its gate — a proxy for &quot;how developed is this
+trend&quot;).</p>
+<p><strong>8 × 4 + 4 = 36.</strong> Note: <strong>no ground-truth label
+is ever a feature</strong> — that would be leakage.</p>
+<h4 id="the-three-models-and-how-theyre-combined">The three models and
+how they&#39;re combined</h4>
+<pre><code>raw_anomaly   = IsolationForest.predict(X) == −1          # unsupervised, corroboration
+proba         = XGBClassifier.predict_proba(X)            # 5 probabilities
+fault, conf   = argmax(proba)                             # the supervised call
+
+residual_gate = any |residual| beyond its gate value      # oil&gt;0.5, cht&gt;15, egt&gt;50, vib&gt;0.5
+classifier_hit= fault != &quot;healthy&quot;  AND  conf ≥ 0.60
+persistent    = the gate has held ≥ 3 s
+severe        = max normalised residual ≥ 5×
+
+ANOMALY  =  classifier_hit  AND  residual_gate  AND  (persistent OR severe)</code></pre>
+<p><strong>Why this AND-logic?</strong> Three independent checks must
+agree:</p>
+<ol type="1">
+<li>the <em>supervised</em> model (macro-F1 0.95) names a specific fault
+with confidence,</li>
+<li>a <em>physics</em> residual is genuinely out of tolerance (not just
+model noise),</li>
+<li>it has <em>lasted</em> (or is extreme) — so a one-frame
+throttle-slam transient during the climb never lights the board.</li>
+</ol>
+<p><code>raw_anomaly</code> from the IsolationForest is carried in the
+output as <code>anomaly_raw</code> for corroboration but <strong>does
+not by itself trigger an alert</strong> — on this feature space its
+recall is only 0.18 (see <a href="#8-numbers-you-must-be-able-to-defend">Section 8</a>), so the
+supervised classifier is the real detector and the forest is a sanity
+check.</p>
+<h4 id="hybrid-physics-first-rul-rulestimator">Hybrid, physics-first RUL
+(<code>RulEstimator</code>)</h4>
+<p>The learned RUL regressor scores <strong>R² = −1.7</strong> on
+held-out flights — worse than guessing the mean. That&#39;s not a bug we can
+train away: in the simulator (as in real engines) the <em>total
+life</em> after a fault onset is only weakly related to any
+instantaneous reading, on purpose, to give flight-to-flight variety. So
+a snapshot regressor can&#39;t learn it.</p>
+<p>Instead the headline RUL <strong>measures the actual rate toward a
+known limit</strong>:</p>
+<pre><code>for each limiting channel (oil pressure, CHT, vibration):
+    slope = least-squares fit over the last ~45 s of that channel
+    if the channel is degrading   AND   its residual confirms it&#39;s abnormal:
+        RUL_channel = (current_value − limit) / (−slope)      # or (limit − value)/slope
+RUL = min(RUL_channel over all channels),  and name which channel drove it</code></pre>
+<ul>
+<li>Limits from the spec file: oil pressure → 1.5 bar abort threshold;
+CHT → 150 °C redline; vibration → 4 g redline.</li>
+<li>The <strong>residual guard</strong>
+(<code>residual &lt; −0.4 bar</code> for oil, <code>&gt; +6 °C</code>
+for CHT) is what stops a throttle-back on descent — which legitimately
+lowers oil pressure — from being read as a failure.</li>
+<li>This is genuinely <strong>physics-informed AI</strong>: it&#39;s an
+algorithm in the ML layer, it&#39;s adaptive to the observed data, and it&#39;s
+fully explainable (&quot;oil pressure −0.11 bar/min, 1.4 bar of margin → ~12
+min&quot;). It sits in the brief&#39;s &quot;hybrid thermodynamic + data-driven&quot;
+innovation area.</li>
+<li>The learned regressor&#39;s number is still computed and shown as a
+small cross-check in the validation footer, flagged unreliable if
+outside 0–3600 s.</li>
+</ul>
+<h4 id="graceful-fallback">Graceful fallback</h4>
+<p>If a <code>.joblib</code> file is missing or won&#39;t unpickle:</p>
+<ul>
+<li>anomaly → a small <code>IsolationForest</code> trained at startup on
+physics-nominal vectors,</li>
+<li>classifier → a rule-based function (<code>_rule_fault</code>: big
+negative oil residual → lubrication; EGT spread &gt; 90 or high
+vibration → misfire; high CHT residual → cooling; …),</li>
+<li>so the pipeline <strong>never raises</strong>.</li>
+</ul>
+<h3 id="57-mlexplainabilitypy">5.7
+<code>ml/explainability.py</code></h3>
+<h4 id="what-shap-does-briefly">What SHAP does, briefly</h4>
+<p>Given a trained model and one input, <strong>SHAP</strong> answers
+&quot;how much did each feature push this specific prediction away from the
+model&#39;s average prediction?&quot; It comes from cooperative game theory:
+treat features as players, the prediction as the payout, and compute
+each player&#39;s fair share (its <strong>Shapley value</strong>) by
+averaging its marginal contribution over all possible feature subsets.
+The shares sum exactly to
+<code>(this prediction − baseline prediction)</code> — that additivity
+is why it&#39;s trustworthy.</p>
+<p>Naive SHAP is exponential in the number of features.
+<strong>TreeSHAP</strong> computes it <em>exactly</em> for tree
+ensembles in polynomial time by walking the trees — that&#39;s the only
+reason per-frame SHAP is feasible here.</p>
+<h4 id="how-we-operationalised-it">How we operationalised it</h4>
+<p>The training notebook (cell 18/19) had a one-off
+<code>explain_prediction</code> that built a fresh explainer for a
+single row. That&#39;s the &quot;stranded SHAP logic&quot; the brief mentions.
+<code>LiveExplainer</code>:</p>
+<ol type="1">
+<li><strong>At startup</strong>: build <strong>one</strong>
+<code>shap.TreeExplainer</code> over the fault classifier. Prime it with
+a <strong>cached background of 50 representative healthy feature
+vectors</strong> (<code>make_background()</code> generates 6 short
+flights and samples 50 healthy rows through the <em>same</em> feature
+transform). Warm it up with one throwaway call so the tree paths are
+JIT-compiled.</li>
+<li>Two construction strategies, tried in order:
+<code>interventional</code> + the cached background (textbook &quot;SHAP vs a
+reference set&quot;), then <code>tree_path_dependent</code> (no background
+needed; tolerates the categorical splits XGBoost created). We run on the
+second.</li>
+<li><strong>Per frame, only when an anomaly is live</strong>:
+<code>get_live_explanation()</code> computes SHAP values for the
+<em>predicted class</em>, takes the <strong>top 3 by magnitude</strong>,
+and returns each with its raw value, sign, and share of the total
+attribution. Measured latency (<code>time.perf_counter()</code>):
+<strong>p50 ≈ 15–22 ms, p95 ≈ 30 ms</strong>, well under the 80 ms
+budget, and it&#39;s off the critical path on healthy frames.</li>
+<li><strong>Fallback</strong>: if SHAP is unavailable, rank the residual
+features by <code>|value| / tolerance</code> — same operator-facing
+shape, never a blank panel.</li>
+</ol>
+<h3 id="58-coretwin_pipelinepy">5.8
+<code>core/twin_pipeline.py</code></h3>
+<p>The glue. <code>TwinPipeline</code>:</p>
+<ul>
+<li><strong><code>__init__</code></strong>: loads
+<code>TwinModels</code> (heavy — the joblibs), builds the SHAP
+background, constructs <code>LiveExplainer</code>. Done once.</li>
+<li><strong><code>reset(scenario)</code></strong>: spins up a fresh CAN
+bus and <code>ScenarioRunner</code>, clears the feature builder&#39;s
+history and the 600-frame ring buffer.</li>
+<li><strong><code>step()</code></strong>: one full frame —
+<code>runner.step()</code> → <code>bus.publish()</code> →
+<code>bus.poll()</code> (decode) → re-attach the stage label + ground
+truth (not on the wire) → <code>models.infer()</code> → if anomaly,
+<code>explainer.get_live_explanation()</code> →
+<code>build_advisory()</code> → assemble the enriched frame → append to
+the buffer.</li>
+<li><strong><code>run()</code></strong>: a headless loop for
+<code>./run_demo.sh --headless</code>.</li>
+</ul>
+<p><strong><code>build_advisory(fault, health, rul_s, anomaly, egt_spread)</code></strong>
+— rule-based, deliberately <em>not</em> ML, because a crew action must
+be traceable:</p>
+<ul>
+<li><code>imminent = rul_s &lt; 90 s</code>,
+<code>near = rul_s &lt; 300 s</code>.</li>
+<li>Per fault there&#39;s a <strong>high-urgency</strong> and a
+<strong>low-urgency</strong> message; pick high if
+<code>imminent or near or health &lt; 55</code>.</li>
+<li>Urgency tier: <code>critical</code> if imminent;
+<code>warning</code> if near or health &lt; 55; else
+<code>caution</code>; <code>nominal</code> if no anomaly.</li>
+<li>Example (lubrication, imminent): <em>&quot;Oil system integrity
+degrading. Throttle back to 55 %, minimise load. RUL below abort
+threshold — execute RTL / nearest- recovery NOW.&quot;</em></li>
+</ul>
+<h3 id="59-dashboard">5.9 <code>dashboard/</code></h3>
+<p><strong><code>dashboard/app.py</code></strong> — the Streamlit app.
+Streamlit&#39;s model is &quot;re-run the whole script on every interaction,&quot;
+so:</p>
+<ul>
+<li>The heavy pipeline is created once via
+<code>@st.cache_resource</code> (shared across reruns).</li>
+<li><code>st.session_state</code> holds <code>playing</code>,
+<code>speed</code> (1/2/5), <code>scenario</code>, and the rolling
+advisory list.</li>
+<li><strong>The run loop</strong>: if <code>playing</code> and the
+mission isn&#39;t over, call <code>pipe.step()</code> <code>speed</code>
+times, render everything, <code>time.sleep(0.12)</code>,
+<code>st.rerun()</code>. So the app advances 1/2/5 simulated frames per
+~0.12 s screen refresh.</li>
+<li>Header controls: scenario <code>selectbox</code>, Play / Pause,
+speed <code>radio</code>, <strong>Inject Fault</strong>, Reset.</li>
+<li><strong>Inject Fault</strong> (<code>_inject_fault</code>): on the
+nominal scenario it hot-swaps to <code>lubrication_loss</code> and
+plays; on a fault scenario it resets and silently replays up to
+<code>(fault_onset − 6 s)</code> so the rolling features are populated,
+then plays — the degradation starts within a couple of seconds instead
+of after 60+.</li>
+</ul>
+<p><strong><code>dashboard/components.py</code></strong> — pure Plotly
+figure builders, dark palette, no Streamlit calls (so they&#39;re
+unit-testable). The six figures are described in <a href="#6-the-four-scenarios-explained">Section 6</a> context and in the
+chat explanation you already have; the key ones:</p>
+<ul>
+<li><code>mission_lifecycle_fig</code> — time series with stage bands,
+throttle, altitude, health, anomaly markers.</li>
+<li><code>twin_cognition_fig</code> — polar bar chart of
+<code>|residual| / tolerance</code> per sensor, with the 1× tolerance
+ring.</li>
+<li><code>residual_track_fig</code> — measured (CAN) vs physics-baseline
+for the current worst channel, with the gap shaded.</li>
+<li><code>shap_bar_fig</code> — horizontal bar of the top-3 SHAP
+drivers.</li>
+<li><code>per_cylinder_egt_fig</code> — the four cylinder EGT
+lines.</li>
+<li><code>fmt_rul</code> — turns RUL seconds into
+<code>MM:SS to limit</code> / <code>NNs — ABORT</code> /
+<code>ABORT NOW</code> with a severity tag.</li>
+</ul>
+<hr />
+<h2 id="6-the-four-scenarios-explained">6. The four scenarios,
+explained</h2>
+<p>Run any of them from the dashboard dropdown, or
+<code>./run_demo.sh --headless &lt;key&gt;</code>.</p>
+<h3 id="nominal_loiter--the-baseline"><code>nominal_loiter</code> — the
+baseline</h3>
+<p>Stable ISR loiter, ISA conditions, no fault. Everything should track
+physics: health 97–99 %, anomaly CLEAR, RUL &quot;—&quot;. <strong>This is the
+control</strong> — it proves the twin doesn&#39;t cry wolf. If a jury only
+remembers one thing, it should be that the green line stays flat
+here.</p>
+<h3 id="altitude_cooling_degradation--cylinder-head-cooling-degradation"><code>altitude_cooling_degradation</code>
+— Cylinder-Head Cooling Degradation</h3>
+<ul>
+<li><strong>Injected</strong>: <code>FaultInjector</code> ramps
+<code>cooling_health</code> down from 1.0 (onset 45 s, 110 s ramp) — the
+cooling airflow is progressively lost. The scenario also pushes the
+climb ~2.6 km higher than planned (thinner air, less cooling), and
+<code>_cooling_shaping</code> adds a direct CHT rise (heat that the fins
+can no longer shed) plus rougher running.</li>
+<li><strong>Signature</strong>: CHT climbs 30–40 °C above the physics
+baseline; EGT rises (leaner burn); vibration creeps up. Oil pressure,
+RPM, fuel all normal.</li>
+<li><strong>Twin should say</strong>: <code>cooling_degradation</code>,
+~100 % confidence; health ~72–84; advisory <em>&quot;reduce throttle,
+increase airspeed for ram cooling, descend to denser air.&quot;</em> RUL
+usually &quot;no imminent hard limit&quot; because CHT, while high, isn&#39;t racing
+the 150 °C redline within 3 minutes.</li>
+<li><strong>The radar</strong>: CHT and Vibration bars way past the
+ring; everything else inside.</li>
+</ul>
+<h3 id="lubrication_loss--lubrication-loss--bearing-failure"><code>lubrication_loss</code>
+— Lubrication Loss &amp; Bearing Failure</h3>
+<ul>
+<li><strong>Injected</strong>: <code>lubrication_health</code> ramps
+down (onset 72 s, 70 s ramp), which in the simulator scales oil pressure
+down and injects friction heat; the scenario carries
+<code>total_life_s = 150 s</code> — a real countdown to seizure.</li>
+<li><strong>Signature</strong>: oil pressure collapses from ~5 bar
+toward 1.5; oil temp rises; vibration spikes (bearing rumble).</li>
+<li><strong>Twin should say</strong>:
+<code>lubrication_degradation</code>, ~100 %; <strong>headline RUL
+counting down to ~10–15 s → &quot;ABORT NOW&quot;</strong>, driver <em>&quot;oil
+pressure → abort limit&quot;</em>; advisory <em>&quot;execute RTL /
+nearest-recovery NOW.&quot;</em></li>
+<li><strong>SHAP</strong>: <code>Oil Pressure residual</code> dominates
+(~60 % of attribution).</li>
+<li><strong>This is the money scenario</strong> — it shows prediction
+<em>before</em> failure, a concrete time budget, and an unambiguous
+action.</li>
+</ul>
+<h3 id="injector_misfire--injector-clog--cylinder-misfire"><code>injector_misfire</code>
+— Injector Clog / Cylinder Misfire</h3>
+<ul>
+<li><strong>Injected</strong>: <code>FaultInjector</code> drops
+<code>combustion_health</code> randomly (onset 60 s);
+<code>_misfire_shaping</code> progressively depresses <strong>cylinder
+3&#39;s EGT</strong> by up to 140 °C, drops its CHT, and adds vibration and
+a small RPM/fuel loss.</li>
+<li><strong>Signature</strong>: on the <strong>per-cylinder EGT</strong>
+chart, cylinder 3&#39;s line peels away from the other three;
+<code>max−min</code> spread blows past 90 °C; vibration jumps; a slight
+power loss.</li>
+<li><strong>Twin should say</strong>: <code>misfire</code>, ~99 %;
+health ~85; advisory <em>&quot;single-cylinder misfire confirmed (EGT spread
+N °C) … plan a precautionary landing.&quot;</em></li>
+<li><strong>SHAP</strong>: <code>Vibration RMS roll_std</code> (the
+roughness feature) leads.</li>
+</ul>
+<p><em>(A fifth fault type, <code>sensor_drift_cht</code>, exists in the
+model and the training set but isn&#39;t one of the four demo buttons —
+mention it as &quot;the twin can also distinguish a lying sensor from a real
+overheat,&quot; see <a href="#35-sensor-faults-vs-engine-faults">Section
+3.5</a>.)</em></p>
+<hr />
+<h2 id="7-design-decisions-and-trade-offs">7. Design decisions and
+trade-offs</h2>
+<p>Every one of these is a &quot;why did you / why didn&#39;t you&quot; a jury can
+ask.</p>
+<h3 id="why-physics-informed-residuals-instead-of-raw-signal-deep-learning">Why
+physics-informed residuals instead of raw-signal deep learning?</h3>
+<ul>
+<li><strong>Data efficiency</strong>: the model doesn&#39;t have to learn
+the entire operating envelope; physics removes it. We train on 140 short
+flights, not millions of hours.</li>
+<li><strong>Generalisation</strong>: a raw-signal model trained on
+temperate low-altitude data would flag a hot-day high-altitude cruise as
+anomalous. Residuals are operating-point-invariant.</li>
+<li><strong>Explainability &amp; certification</strong>: the physics is
+auditable YAML + closed-form equations; the classifier is decision trees
+with exact SHAP. Nothing on the safety path is a black box.</li>
+<li><strong>Trade-off</strong>: the physics model must be reasonably
+accurate or the residuals carry a systematic bias. We accept a modelling
+burden in exchange for the above.</li>
+</ul>
+<h3 id="why-xgboost-and-not-a-neural-network">Why XGBoost and not a
+neural network?</h3>
+<ul>
+<li>Tabular data with 36 features and ~50 k rows —
+<strong>gradient-boosted trees are the known best-in-class</strong>
+here; a neural net would need far more data to match it.</li>
+<li><strong>TreeSHAP</strong> gives <em>exact</em> per-prediction
+explanations in milliseconds. Neural explanations (integrated gradients,
+KernelSHAP) are approximate and slower.</li>
+<li>Trees are <strong>inspectable</strong> and quantise/deploy trivially
+to an edge computer (ONNX, or even hand-rolled).</li>
+<li>Trade-off: trees don&#39;t extrapolate beyond the training range —
+mitigated because the <em>physics</em> handles the operating-point range
+and the trees only see bounded residuals.</li>
+</ul>
+<h3 id="why-a-single-process-for-the-demo-when-the-brief-implies-a-distributed-gcs">Why
+a single process for the demo, when the brief implies a distributed
+GCS?</h3>
+<p>Covered in <a href="#42-why-one-process-and-not-the-original-4-process-mqtt-design">4.2</a>.
+Short version: the distributed <strong>MQTT</strong> design is preserved
+in <code>legacy/</code> and is the fleet-deployment path; the demo
+collapses it to one process so it starts with one command and has no
+broker race. You didn&#39;t throw the architecture away — you have both.</p>
+<h3 id="why-is-the-headline-rul-a-physics-trend-and-not-the-trained-regressor">Why
+is the headline RUL a physics trend and not the trained regressor?</h3>
+<p>The regressor scores <strong>R² &lt; 0</strong>. In the simulator
+(and in reality) time-to-failure isn&#39;t a function of an instantaneous
+snapshot — it depends on the unobserved severity of the initiating
+fault. So we <strong>measure the rate toward a known limit</strong>
+instead, which is accurate, explainable, and adaptive. The regressor&#39;s
+output is still shown as a cross-check. This is squarely in the brief&#39;s
+&quot;hybrid thermodynamic + data-driven&quot; innovation area.</p>
+<h3 id="why-does-the-isolationforest-have-low-recall--is-the-anomaly-detection-weak">Why
+does the IsolationForest have low recall — is the anomaly detection
+weak?</h3>
+<p>The <strong>unsupervised</strong> detector alone gets ROC-AUC 0.77 /
+recall 0.18 on this feature space — unsupervised methods struggle when
+faults and healthy transients overlap in feature space. But the
+<strong>detector isn&#39;t the IsolationForest</strong> — it&#39;s the
+<em>supervised classifier</em> (macro-F1 0.95) plus the physics residual
+gate plus a persistence check, all of which must agree. The forest is a
+corroborating sanity check. Net result: <strong>zero false alarms on the
+nominal scenario, every injected fault caught within a few seconds of
+onset</strong> (verified by <code>./run_demo.sh --check</code>).</p>
+<h3 id="why-not-a-3-d-model-of-the-airframe">Why not a 3-D model of the
+airframe?</h3>
+<p>The legacy dashboard drew a stylised 3-D aircraft. No real UAV CAD
+was provided, so it was decoration over a placeholder mesh, and it cost
+frame budget. It&#39;s replaced by the <strong>residual radar</strong> and
+the <strong>measured-vs-physics track</strong>, which show <em>where the
+twin believes physics is breaking</em> — information, not ornament.</p>
+<h3 id="why-compress-the-mission-to-180-seconds-and-start-the-engine-warm">Why
+compress the mission to 180 seconds, and start the engine warm?</h3>
+<p>A real ISR sortie is 18–50 h; you can&#39;t demo that. 180 s covers the
+full lifecycle. The engine starts warm because (a) a MALE UAV is never
+launched cold — the window is a slice of a long sortie — and (b) the
+steady-state physics baseline would otherwise disagree with a
+still-warming simulator for the whole clip. The simulator&#39;s thermal
+time-constants are shortened to match the compressed timeline. This is a
+<strong>modelling choice for the demo</strong>, stated openly; the
+physics <em>equations</em> are unchanged.</p>
+<h3 id="why-keep-the-old-files-instead-of-deleting-them">Why keep the
+old files instead of deleting them?</h3>
+<p><code>legacy/</code> (MQTT pipeline, training notebook, old
+dashboard) and <code>models_legacy_kaggle/</code> (original artifacts)
+are kept so the evolution is visible and the fleet-deployment path is
+documented, not lost.</p>
+<h3 id="why-streamlit">Why Streamlit?</h3>
+<p>Fastest path to a real-time dashboard in pure Python — no separate
+frontend build, no JS. Trade-off: Streamlit re-runs the whole script per
+interaction, so we drive the sim in the run loop and cache the heavy
+objects. For a production GCS you&#39;d move to a proper event-driven
+frontend (the <code>legacy/</code> design already separates concerns for
+that).</p>
+<h3 id="why-simulated-data-and-not-a-real-engine-dataset">Why simulated
+data and not a real engine dataset?</h3>
+<p>No instrumented MALE UAV engine dataset is publicly available, and
+the brief explicitly permits &quot;simulated or real engine datasets.&quot; The
+simulator is physics-based (ODE thermal integration, turbo model,
+per-cylinder effects), and the twin&#39;s physics baseline is an
+<em>independent</em> implementation, so we&#39;re not just checking a model
+against itself. Swapping in a real CAN feed is a one-line transport
+change (<a href="#9-deployment-roadmap">Section 9</a>).</p>
+<hr />
+<h2 id="8-numbers-you-must-be-able-to-defend">8. Numbers you must be
+able to defend</h2>
+<p>From <code>models/metrics.json</code> (held-out, split by
+flight):</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>How to talk about it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fault classifier macro-F1</strong></td>
+<td><strong>0.95</strong></td>
+<td>&quot;Averaged equally over all five classes, on flights the model never
+saw. Per-class F1 ranges ~0.91 (misfire) to ~0.97 (cooling).&quot;</td>
+</tr>
+<tr>
+<td>Classifier accuracy</td>
+<td>~0.95</td>
+<td>Secondary to macro-F1 because the classes are imbalanced (healthy
+dominates)</td>
+</tr>
+<tr>
+<td><strong>Anomaly detector ROC-AUC</strong></td>
+<td>0.77</td>
+<td>&quot;The <em>unsupervised</em> layer alone. It&#39;s a corroborating signal
+— the supervised classifier plus the physics gate is the actual
+detector.&quot;</td>
+</tr>
+<tr>
+<td>Anomaly detector recall / FPR</td>
+<td>0.18 / 0.03</td>
+<td>&quot;Low standalone recall is expected for unsupervised detection when
+faults and transients overlap; that&#39;s <em>why</em> it&#39;s not used
+alone.&quot;</td>
+</tr>
+<tr>
+<td><strong>RUL regressor R²</strong></td>
+<td><strong>−1.7</strong></td>
+<td>&quot;Deliberately not the headline number — time-to-failure isn&#39;t
+learnable from a snapshot here. The physics trend estimator is the
+headline; this is a logged cross-check.&quot;</td>
+</tr>
+<tr>
+<td>RUL regressor MAE</td>
+<td>~91 s</td>
+<td>Same caveat</td>
+</tr>
+<tr>
+<td><strong>End-to-end scenario check</strong></td>
+<td><strong>4/4 PASS</strong></td>
+<td><code>./run_demo.sh --check</code> — nominal stays clear, all three
+faults are caught and correctly classified</td>
+</tr>
+<tr>
+<td>Twin inference latency</td>
+<td>p50 ~35–55 ms</td>
+<td><code>time.perf_counter()</code> around <code>models.infer()</code>
+— feature build + both models + health + RUL</td>
+</tr>
+<tr>
+<td>SHAP latency</td>
+<td>p50 ~15–22 ms, p95 ~30 ms</td>
+<td>Only on anomaly frames; budget was 80 ms</td>
+</tr>
+<tr>
+<td>CAN</td>
+<td>5 frames / sample, IDs 0x100–0x104</td>
+<td>Real pack→unpack every frame</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Rule for the jury:</strong> never oversell. &quot;The classifier
+is strong (0.95), the unsupervised anomaly layer is a weaker
+corroborator (0.77) which is why it&#39;s not the sole trigger, and the
+learned RUL is poor which is why we use a physics trend instead.&quot; Owning
+the weak numbers <em>builds</em> credibility.</p>
+<hr />
+<h2 id="9-deployment-roadmap">9. Deployment roadmap</h2>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>What changes from the demo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bench / HIL rig</strong></td>
+<td>Replace <code>ScenarioRunner</code> with a <code>socketcan</code>
+reader on the real ECU/FADEC bus. <code>core/can_telemetry.py</code>
+already decodes — only the signal map (<code>FRAME_MAP</code>) needs to
+match the engine&#39;s real DBC.</td>
+</tr>
+<tr>
+<td><strong>Onboard edge</strong></td>
+<td><code>core/</code> + <code>ml/</code> run unchanged on a companion
+computer (NVIDIA Jetson / small x86). Export the XGBoost models to
+<strong>ONNX</strong> for portable, fast inference; move TreeSHAP to a
+fixed per-class background for constant-time explanation. The edge
+publishes <em>enriched</em> frames northbound.</td>
+</tr>
+<tr>
+<td><strong>GCS / fleet</strong></td>
+<td>Re-enable the <code>legacy/</code> <strong>MQTT</strong> path as the
+air-to-ground transport: the edge publishes
+<code>uav/engine/enriched</code>, the ground dashboard subscribes.
+<code>uav_id</code> / <code>session_id</code> are already in the data
+model for multi-aircraft.</td>
+</tr>
+<tr>
+<td><strong>Fleet analytics</strong></td>
+<td>Persist enriched frames (the legacy SQLite schema is a starting
+point) → cross-mission RUL calibration, per-tail-number degradation
+baselines, and <strong>federated learning</strong> (each aircraft
+contributes model updates without shipping raw telemetry).</td>
+</tr>
+<tr>
+<td><strong>Certification</strong></td>
+<td>The physics model and every threshold are in one auditable YAML; the
+classifier is tree-based and exactly SHAP-explainable; no black-box
+end-to-end network sits on the safety path. This is a defensible basis
+for airworthiness review.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="10-jury-qa-bank">10. Jury Q&amp;A bank</h2>
+<h3 id="conceptual">Conceptual</h3>
+<p><strong>Q: What exactly is the &quot;digital twin&quot; here — the simulator or
+the analytics?</strong> The twin is the <em>synchronised virtual model
+plus its analytics</em>. Concretely: <code>core/physics_model.py</code>
+is the virtual model, it&#39;s kept in step with the physical engine by the
+CAN telemetry stream, and the <code>ml/</code> layer turns the
+model↔︎reality difference into health, faults, RUL and advice. The
+scenario simulator stands in for the physical engine during the
+demo.</p>
+<p><strong>Q: How is this different from a normal threshold
+alarm?</strong> A threshold alarm fires when a raw value crosses a line
+— always <em>after</em> the problem. We compare against a <em>physics
+prediction</em> (so we catch a deviation long before it reaches a
+redline), we track the <em>rate</em> of deviation (so we can predict
+time-to-failure), and we <em>classify</em> the fault and
+<em>explain</em> it (so the operator knows what to do, not just that
+something&#39;s wrong).</p>
+<p><strong>Q: Why should I trust the fault call?</strong> Three
+independent things must agree: a supervised classifier at 95 % macro-F1,
+a physics residual actually outside tolerance, and persistence over
+time. Plus SHAP shows you <em>which</em> sensor deviations drove the
+call, and the validation footer shows the simulator&#39;s ground truth next
+to our verdict.</p>
+<h3 id="physics--domain">Physics / domain</h3>
+<p><strong>Q: Walk me through your physics model.</strong> See <a href="#52-corephysics_modelpy">5.2</a>. Key beats: barometric atmosphere
+→ turbo model with a 5 km critical altitude → engine load =
+(MAP/MAPmax)·(RPM/RPMmax) → two-segment temperature interpolation
+anchored at idle/cruise/redline spec values → CHT corrected for ambient
+and ram-air cooling → oil/fuel/vibration as monotonic functions of load.
+Then residual = measured − expected.</p>
+<p><strong>Q: Why turbocharged? Why does critical altitude
+matter?</strong> A naturally-aspirated engine loses power roughly with
+air density and would be useless above 3–4 km. A turbo compresses the
+intake air to hold sea-level manifold pressure up to its <em>critical
+altitude</em> (~5 km here); above that, boost and power fall off. MALE
+UAVs cruise at 3–9 km, so turbocharging is mandatory, and the model has
+to represent the falloff.</p>
+<p><strong>Q: How do you detect a misfire specifically?</strong>
+Per-cylinder EGT. A dead/weak cylinder exhausts cooler gas, so its EGT
+drops well below the other three. When <code>max−min</code> across the
+four exceeds ~90 °C, combined with a vibration rise, that&#39;s a misfire. A
+single averaged EGT can&#39;t see it — that&#39;s why the CAN frame set carries
+all four cylinders.</p>
+<p><strong>Q: A sensor could just be faulty. Do you handle
+that?</strong> Yes — <code>sensor_drift_cht</code>. If CHT rises but
+EGT, oil temperature and everything else stay normal, that&#39;s
+<em>inconsistent with real overheating</em>, so the classifier reports
+sensor drift, not an engine fault. It&#39;s the subtlest of the five classes
+and it&#39;s in the training set.</p>
+<h3 id="ml">ML</h3>
+<p><strong>Q: How big is your training set and where&#39;s it from?</strong>
+140 randomised 3-minute flights (~50 000 rows at 2 Hz), generated by
+<code>ml/dataset.py</code> from the <em>same physics the demo runs</em>
+but with randomised operating point, fault type, onset, severity and
+seed. The four demo scenarios use different seeds, so they&#39;re always
+out-of-sample.</p>
+<p><strong>Q: How do you avoid data leakage / overfitting?</strong>
+Split <strong>by flight</strong>, not by row — whole flights go to train
+or test, never both. No ground-truth label is ever a feature. Held-out
+macro-F1 is 0.95.</p>
+<p><strong>Q: Your anomaly detector&#39;s AUC is only 0.77.</strong>
+Correct, and that&#39;s the <em>unsupervised</em> layer in isolation.
+Unsupervised anomaly detection struggles when healthy transients (a hard
+climb) and real faults sit near each other in feature space. That&#39;s
+exactly why it isn&#39;t the trigger — the supervised classifier plus the
+physics gate plus persistence is. The forest is a corroborating check.
+Net: zero false alarms on nominal, all faults caught.</p>
+<p><strong>Q: Your RUL regressor has negative R². Isn&#39;t that
+broken?</strong> It can&#39;t be trained away: after a fault onset, the time
+to failure depends on the severity of the initiating fault, which isn&#39;t
+observable in a single snapshot — by design, for flight-to-flight
+variety. So we don&#39;t use it. The headline RUL is a physics trend
+extrapolation (<code>RulEstimator</code>): fit the recent rate of the
+limiting channel, divide the remaining margin by that rate, gate it on
+the residual sign. Accurate, explainable, adaptive. The regressor is a
+logged cross-check only.</p>
+<p><strong>Q: Why not deep learning / an LSTM / a transformer?</strong>
+36 tabular features, 50 k rows: gradient-boosted trees are the state of
+the art for this shape of problem and would beat a neural net without
+far more data. We also need <strong>exact</strong> millisecond
+explanations (TreeSHAP) and trivial edge deployment (ONNX / quantised
+trees). An LSTM would add latency, opacity and data hunger for no
+accuracy gain here. If we later fuse raw vibration <em>spectra</em> (not
+just RMS), a small 1-D CNN on that channel would be worth it — that&#39;s
+future work.</p>
+<p><strong>Q: How does SHAP work and why is it fast enough?</strong>
+SHAP assigns each feature its game-theoretic fair share of
+<code>(prediction − baseline)</code>; the shares sum exactly to that
+difference. Naive SHAP is exponential; <strong>TreeSHAP</strong>
+computes it exactly for tree ensembles in polynomial time by walking the
+trees. We build one explainer at startup, prime it on 50 cached healthy
+vectors, and only call it on anomaly frames — p50 ~18 ms.</p>
+<p><strong>Q: What are your 36 features?</strong> Per sensor (8 of
+them): physics residual, 60-s rolling mean, 60-s rolling std, 10-s rate.
+Plus throttle, altitude, ambient, and time-spent-in-anomaly. Residual =
+the deviation, std = roughness, rate = trend speed. No labels as
+features.</p>
+<h3 id="software--systems">Software / systems</h3>
+<p><strong>Q: Is the CAN bus real or a mock?</strong> It&#39;s
+<code>python-can</code> with the <code>virtual</code> backend — a real
+in-process CAN bus with the real API and real byte framing. Every
+telemetry sample is packed into 5 8-byte frames (IDs 0x100–0x104), sent,
+received, and decoded — the twin never sees data that didn&#39;t survive the
+wire format. Going to hardware is one line:
+<code>interface=&#39;virtual&#39;</code> →
+<code>interface=&#39;socketcan&#39;, channel=&#39;can0&#39;</code>. Run
+<code>python core/can_telemetry.py &lt;scenario&gt; --dump</code> to see
+the hex.</p>
+<p><strong>Q: What&#39;s your latency budget and are you within it?</strong>
+At 2 Hz the budget is 500 ms/frame. Twin inference is ~40–55 ms, SHAP
+~20 ms (anomaly frames only). ~10× headroom — comfortably real-time and
+edge-deployable.</p>
+<p><strong>Q: What happens if a model file is missing, or CAN isn&#39;t
+installed, or SHAP fails?</strong> Every stage has a fallback: synthetic
+anomaly model, rule-based classifier, byte-compatible loopback bus,
+residual-ranking &quot;SHAP.&quot; The pipeline never raises.
+<code>./run_demo.sh --check</code> verifies the happy path end to
+end.</p>
+<p><strong>Q: How is the demo reproducible?</strong> Fixed seeds per
+scenario → byte-identical telemetry every run. <code>--check</code> is a
+deterministic pass/fail over all four scenarios.</p>
+<h3 id="application--operations">Application / operations</h3>
+<p><strong>Q: Who uses this and how?</strong> Three audiences (as in the
+brief): the <strong>UAV operator</strong> watches the health index, RUL
+and the advisory console during a mission; the <strong>propulsion
+engineer</strong> uses the residual radar and SHAP to understand
+<em>why</em>; <strong>maintenance</strong> uses the post-mission replay
+and the advisory log to plan work. In the field it runs at the GCS, fed
+by a downlinked CAN-over-radio telemetry stream.</p>
+<p><strong>Q: What decision does it actually drive?</strong> Continue /
+throttle-back / divert / abort. The advisory console turns the fault +
+RUL + health into one of those, with numbers (&quot;throttle to 60 %&quot;, &quot;RTL
+now, RUL &lt; 12 min&quot;).</p>
+<p><strong>Q: What&#39;s the false-alarm cost and how do you manage
+it?</strong> A false abort wastes a sortie. We manage it with the
+three-way AND (classifier + physics gate + persistence) and by tuning
+the residual tolerances so nominal sits at 97–99 % health. Verified:
+zero alarms on the nominal scenario.</p>
+<p><strong>Q: Could this run onboard, not just on the ground?</strong>
+Yes — <code>core/</code> + <code>ml/</code> are ~a few hundred KB of
+models and pure-Python/NumPy. On a Jetson-class board with ONNX models
+it&#39;s well under real-time. Onboard analytics + a compressed health
+summary downlink is the &quot;Edge AI for UAV&quot; innovation the brief asks
+for.</p>
+<h3 id="gotcha-questions">&quot;Gotcha&quot; questions</h3>
+<p><strong>Q: You trained and you test on the same simulator — isn&#39;t
+that circular?</strong> Two defences. (1) The training flights and the
+demo scenarios use different seeds, altitudes, fault types and
+severities — the demo is genuinely out-of-sample, and we split by
+flight. (2) The twin&#39;s physics baseline is an <em>independent</em>
+re-implementation of the expected-value model, not the simulator&#39;s own
+code — so the residual isn&#39;t a model checking itself. The honest
+limitation is that both share a physics <em>worldview</em>; validating
+against real engine data is the next step, and the architecture is built
+for that swap.</p>
+<p><strong>Q: The health index dips at the start even on the nominal run
+— bug?</strong> That&#39;s the throttle slam from taxi (15 %) to climb (88
+%) at t≈15 s. The physics baseline reacts instantly; the simulated
+engine&#39;s temperatures lag. The residual spikes for a few seconds, the
+health index dips, and then they re-converge — and critically <strong>no
+anomaly fires</strong>, because the persistence + classifier checks
+reject a short transient. It&#39;s a visible demonstration that the twin is
+sensitive but not trigger-happy.</p>
+<p><strong>Q: Your RUL number jumps around.</strong> It&#39;s a live trend
+extrapolation: <code>RUL = margin / rate</code>, and both the margin
+(noisy sensor near a threshold) and the rate (least-squares slope over
+45 s) fluctuate each frame, so near the abort point small noise = big
+percentage swings, and the residual guard can briefly flip it to &quot;—&quot;.
+That&#39;s how raw trend prognostics behave; production systems smooth it
+with a Kalman filter. We can add a 5–10 s smoother if a steadier readout
+is preferred — kept it raw so the mechanism is visible.</p>
+<p><strong>Q: Why five fault classes and not more?</strong> They cover
+the brief&#39;s list (misfire, cooling degradation, lubrication issues,
+sensor drift) and the highest-severity real failure modes. The framework
+is class-agnostic — adding detonation, fuel-pump decay, ignition-module
+failure, etc. is a matter of adding scenarios to
+<code>scenario_runner.py</code> and retraining; no architecture
+change.</p>
+<p><strong>Q: What breaks this system?</strong> (1) A physics-model
+error introduces a systematic residual bias — mitigated by the auditable
+spec file and by calibrating against real data. (2) A fault mode not in
+the training set would be caught by the <em>anomaly</em> layer as
+&quot;unknown deviation&quot; but mis-labelled by the classifier — the SHAP panel
+would still show the operator the real driver. (3) Simultaneous
+multi-fault conditions aren&#39;t explicitly modelled yet. All three are
+named in <a href="#12-known-limitations-and-honest-future-work">Section
+12</a>.</p>
+<hr />
+<h2 id="11-4-minute-demo-script">11. 4-minute demo script</h2>
+<blockquote>
+<p>Rehearse this. Timings assume 5× speed.</p>
+</blockquote>
+<p><strong>0:00 — Frame it (20 s).</strong> &quot;MALE UAV, single piston
+engine, 30-hour missions. If that engine fails, the mission and often
+the aircraft are lost. Today&#39;s monitors are threshold alarms — they warn
+you after the redline. This is a digital twin that predicts the failure
+and tells the operator what to do. One process, one command, live
+telemetry over a virtual CAN bus.&quot;</p>
+<p><strong>0:20 — Nominal (40 s).</strong> Select <em>Nominal
+Loiter</em>, Play at 5×. &quot;Left: the mission lifecycle — taxi, climb,
+cruise, loiter. The green line is the health index, computed by
+comparing every sensor against a first-principles physics model. It
+stays at 98 %. Right: the twin-cognition radar — every bar is
+<code>|sensor − physics| ÷ tolerance</code>; all green, all inside the
+ring. No false alarms. This is the control.&quot;</p>
+<p><strong>1:00 — Inject lubrication failure (90 s).</strong> Switch to
+<em>Lubrication Loss</em>, hit <strong>Inject</strong>. &quot;I&#39;ve injected
+an oil-pump failure at loiter. Watch the oil-pressure track — the orange
+sensor line is peeling away from the dotted physics baseline; the red
+gap is the residual. Top strip: anomaly confidence just went to 100 %,
+classified as <em>lubrication degradation</em>. And the RUL — remaining
+useful life — is counting down: &#39;ABORT in 40 seconds&#39;, driver &#39;oil
+pressure to abort limit&#39;. The advisory console: &#39;execute
+Return-To-Launch now.&#39; Bottom right, live SHAP: the call is 60 % driven
+by the oil-pressure residual — the twin is telling the engineer
+<em>why</em>, in 18 milliseconds, every frame.&quot;</p>
+<p><strong>2:30 — Misfire (60 s).</strong> Switch to <em>Injector
+Misfire</em>, Play at 5×. &quot;Different failure. The per-cylinder EGT chart
+— three cylinders bunched, cylinder 3 diverging by 150 °C. That spread
+plus the vibration rise is an unambiguous single-cylinder misfire. SHAP
+leads with the vibration-roughness feature. Advisory: precautionary
+landing.&quot;</p>
+<p><strong>3:30 — Close (30 s).</strong> &quot;Physics-informed: the ML works
+on residuals from an auditable thermodynamic model, so it needs 140
+training flights, not millions of hours, and it generalises. Classifier
+macro-F1 0.95 on unseen flights. Everything&#39;s tree-based and
+SHAP-explainable — nothing on the safety path is a black box. It runs at
+40 milliseconds a frame, so it deploys to an onboard edge computer. The
+distributed MQTT ground-station path is already in the repo. Thank
+you.&quot;</p>
+<hr />
+<h2 id="12-known-limitations-and-honest-future-work">12. Known
+limitations and honest future work</h2>
+<p>A jury respects a team that knows the edges of its own system.</p>
+<table>
+<thead>
+<tr>
+<th>Limitation</th>
+<th>Why it exists</th>
+<th>Path forward</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Validated on simulated data only</strong></td>
+<td>No public instrumented MALE-engine dataset</td>
+<td>Bench/HIL run against a real ECU; recalibrate the spec-file
+tolerances from real healthy data</td>
+</tr>
+<tr>
+<td><strong>Twin physics and simulator share a worldview</strong></td>
+<td>Same modelling assumptions on both sides</td>
+<td>The physics baseline is already an independent implementation;
+real-data validation closes the loop</td>
+</tr>
+<tr>
+<td><strong>Compressed 180-s mission, warm-start</strong></td>
+<td>Can&#39;t demo 30 h; steady-state baseline vs a warming engine</td>
+<td>For an onboard build the baseline becomes stateful (its own thermal
+lag) so full cold-start is handled</td>
+</tr>
+<tr>
+<td><strong>RUL readout is jittery near the threshold</strong></td>
+<td>Raw <code>margin / rate</code> with a noisy margin</td>
+<td>Kalman-filter the slope estimate; report a confidence band, not a
+point</td>
+</tr>
+<tr>
+<td><strong>Unsupervised anomaly layer is weak alone (AUC
+0.77)</strong></td>
+<td>Faults and transients overlap in feature space</td>
+<td>Better residual features (vibration <em>spectra</em>, not just RMS);
+a small autoencoder on the residual vector</td>
+</tr>
+<tr>
+<td><strong>Single-fault scenarios only</strong></td>
+<td>Simpler to model and label</td>
+<td>Add compound-fault scenarios; move from single-label to multi-label
+classification</td>
+</tr>
+<tr>
+<td><strong>Learned RUL regressor is not usable (R² &lt;
+0)</strong></td>
+<td>Time-to-failure isn&#39;t in a snapshot</td>
+<td>Sequence model (small temporal CNN/GRU) over the residual history,
+trained with survival-analysis loss</td>
+</tr>
+<tr>
+<td><strong>5 fault classes</strong></td>
+<td>Covers the brief + top severities</td>
+<td>Framework is class-agnostic — add scenarios + retrain</td>
+</tr>
+<tr>
+<td><strong>Streamlit re-runs the whole script</strong></td>
+<td>Fastest path to a Python dashboard</td>
+<td>Production GCS uses an event-driven frontend over the
+<code>legacy/</code> MQTT feed</td>
+</tr>
+<tr>
+<td><strong>Fixed CAN signal map</strong></td>
+<td>Hand-coded for the demo</td>
+<td>Load a real DBC file at startup</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>End of explainer. Keep <code>DESIGN_NOTES.md</code> for the short
+version, this for depth, and <code>./run_demo.sh --check</code> to prove
+it runs.</em></p>
+</body>
+</html>
